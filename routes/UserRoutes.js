@@ -82,6 +82,38 @@ users.post('/register', rf.verifyToken, (req, res) => {
       });
 });
 
+users.post('/edit', rf.verifyToken, (req, res) => {
+   User.update(
+      {
+         first_name: req.body.first_name,
+         last_name: req.body.last_name,
+         email: req.body.email
+      },
+      { where: { id: req.body.id } },
+      { limit: 1 }
+   )
+
+      .then(() => {
+         res.send(200).end();
+      })
+      .catch((err) => {
+         Logfn.log2db(
+            500,
+            fileName,
+            'register.2',
+            'catch',
+            err,
+            ip,
+            req.headers.referer,
+            tdate
+         );
+         res.json({
+            error: 'An error occurred please contact the admin'
+         }).end();
+         console.log(`error trying to update admin user:  : ` + err);
+      });
+});
+
 users.post('/login', (req, res) => {
    // display path of file
    User.findOne({
@@ -171,10 +203,10 @@ users.get('/adminpanel', rf.verifyToken, (req, res) => {
 });
 
 users.post('/remove_user', rf.verifyToken, (req, res) => {
-   console.log('req.body.theUuid = ' + JSON.stringify(req.body.theUuid));
+   console.log('req.body.theUuid = ' + JSON.stringify(req.body.id));
    User.update(
       { isDeleted: 1 },
-      { returning: true, where: { uuid: req.body.theUuid } }
+      { returning: true, where: { id: req.body.id } }
    )
       .then((data) => {
          res.send(data).end();

@@ -24,7 +24,7 @@ module.exports = db.sequelize.define(
          allowNull: false
       },
       gender: {
-         type: DataTypes.ENUM,
+         type: Sequelize.STRING,
          values: ['M', 'F', 'X'],
          allowNull: false
       },

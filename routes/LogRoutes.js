@@ -13,7 +13,7 @@ let tdate = Logfn.get_date();
 let fileName = __filename.split(/[\\/]/).pop();
 
 logs.post('/get_logs', rf.verifyToken, (req, res) => {
-   let code = 500,
+   let code = '500',
       perPage = 20,
       offset = 0;
    let p = req.body.page;

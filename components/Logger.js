@@ -12,6 +12,7 @@ exports.log2db = (
 ) => {
    console.log('inside log2db');
    console.log(msg_app);
+   msg_app = msg_app.substring(0, 250);
    if (typeof msg_app && msg_app !== undefined)
       msg_app = JSON.stringify(msg_app);
    msg_app = msg_app.substring(0, 499);
