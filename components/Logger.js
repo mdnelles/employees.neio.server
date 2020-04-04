@@ -10,9 +10,14 @@ exports.log2db = (
    refer,
    tdate
 ) => {
-   console.log('inside log2db');
-   console.log(msg_app);
-   msg_app = msg_app.substring(0, 250);
+   console.log(' >> inside log2db > msg_app = ' + msg_app);
+   if (msg_app === undefined) {
+      msg_app = 'N/A';
+   } else {
+      msg_app = msg_app.toString().replace(/"/g, '``').replace(/'/g, '`');
+   }
+
+   msg_app = msg_app.toString().substring(0, 250);
    if (typeof msg_app && msg_app !== undefined)
       msg_app = JSON.stringify(msg_app);
    msg_app = msg_app.substring(0, 499);
@@ -24,7 +29,7 @@ exports.log2db = (
       msg_app,
       ip,
       refer,
-      tdate
+      tdate,
    };
    Log.create(logData);
    //console.log('Data logged to DB: ' + logData);

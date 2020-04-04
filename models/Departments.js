@@ -4,16 +4,16 @@ const db = require('../database/db.js');
 module.exports = db.sequelize.define(
    'department',
    {
-      id: {
+      dept_no: {
          type: Sequelize.INTEGER,
          primaryKey: true,
-         autoIncrement: true
+         autoIncrement: true,
       },
-      ttype: {
-         type: Sequelize.STRING
-      }
+      dept_name: {
+         type: Sequelize.STRING,
+      },
    },
    {
-      timestamps: false
+      timestamps: false,
    }
 );

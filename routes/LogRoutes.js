@@ -23,16 +23,18 @@ logs.post('/get_logs', rf.verifyToken, (req, res) => {
    console.log('p = ' + p);
    if (p !== undefined && !isNaN(p)) offset = p * perPage - perPage;
 
+   // old query before using material ui
+   // 'SELECT * FROM logs WHERE code LIKE :code ORDER BY id DESC limit :perPage OFFSET :offset',
    db.sequelize
       .query(
-         'SELECT * FROM logs WHERE code LIKE :code ORDER BY id DESC limit :perPage OFFSET :offset',
+         'SELECT * FROM logs WHERE code LIKE :code ORDER BY id DESC LIMIT 9500',
          {
             replacements: {
-               code: code,
+               code: `%${code}%`,
                perPage: perPage,
-               offset: offset
+               offset: offset,
             },
-            type: Sequelize.QueryTypes.SELECT
+            type: Sequelize.QueryTypes.SELECT,
          }
       )
       .then((data) => {
@@ -50,9 +52,7 @@ logs.post('/get_logs', rf.verifyToken, (req, res) => {
             tdate
          );
          console.log('Client Error @ UserFunctions > get_logs' + err);
-         res.status(404)
-            .send('Error Location 102')
-            .end();
+         res.status(404).send('Error Location 102').end();
       });
 });
 
@@ -63,9 +63,9 @@ logs.post('/get_logcount', rf.verifyToken, (req, res) => {
    db.sequelize
       .query('SELECT count(*) FROM logs WHERE code = :code ', {
          replacements: {
-            code: code
+            code: code,
          },
-         type: Sequelize.QueryTypes.SELECT
+         type: Sequelize.QueryTypes.SELECT,
       })
       .then((data) => {
          data = JSON.stringify(data);
@@ -86,9 +86,7 @@ logs.post('/get_logcount', rf.verifyToken, (req, res) => {
             tdate
          );
          console.log('Server @ LogRoutes.get_count' + err);
-         res.status(200)
-            .send('Error LogRoutes.get_count')
-            .end();
+         res.status(200).send('Error LogRoutes.get_count').end();
       });
 });
 

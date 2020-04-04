@@ -7,25 +7,25 @@ module.exports = db.sequelize.define(
       emp_no: {
          type: Sequelize.INTEGER,
          primaryKey: true,
-         allowNull: false
+         allowNull: false,
       },
       salary: {
-         type: Sequelize.INTERGER,
-         allowNull: false
+         type: Sequelize.INTEGER,
+         allowNull: false,
       },
       from_date: {
          type: Sequelize.DATE,
          defaultValue: Sequelize.NOW,
          primaryKey: true,
-         allowNull: false
+         allowNull: false,
       },
       to_date: {
          type: Sequelize.DATE,
          defaultValue: Sequelize.NOW,
-         allowNull: false
-      }
+         allowNull: false,
+      },
    },
    {
-      timestamps: false
+      timestamps: false,
    }
 );

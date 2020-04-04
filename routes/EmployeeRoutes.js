@@ -1,10 +1,11 @@
 const express = require('express'),
    employee = express.Router(),
    cors = require('cors'),
-   jwt = require('jsonwebtoken'),
    bcrypt = require('bcrypt'),
-   path = require('path'),
+   db = require('../database/db'),
+   Sequelize = require('sequelize'),
    Employees = require('../models/Employees'),
+   Salaries = require('../models/Salaries'),
    Logfn = require('../components/Logger'),
    rf = require('./RoutFuctions');
 //const CircularJSON = require('flatted');
@@ -23,14 +24,14 @@ employee.post('/add', rf.verifyToken, (req, res) => {
       last_name: req.body.last_name,
       email: req.body.email,
       password: req.body.password,
-      created: today
+      created: today,
    };
 
    Employees.findOne({
       where: {
          email: req.body.email,
-         isdeleted: 0
-      }
+         isdeleted: 0,
+      },
    })
       //TODO bcrypt
       .then((employee) => {
@@ -55,7 +56,7 @@ employee.post('/add', rf.verifyToken, (req, res) => {
                         tdate
                      );
                      res.json({
-                        error: 'An error occurred please contact the admin'
+                        error: 'An error occurred please contact the admin',
                      }).end();
                      console.log(
                         'Err (catch) /EmployeeRoutes/register: ' + err
@@ -78,7 +79,7 @@ employee.post('/add', rf.verifyToken, (req, res) => {
             tdate
          );
          res.json({
-            error: 'An error occurred please contact the admin'
+            error: 'An error occurred please contact the admin',
          }).end();
          console.log('Err #116: ' + err);
       });
@@ -89,7 +90,7 @@ employee.post('/edit', rf.verifyToken, (req, res) => {
       {
          first_name: req.body.first_name,
          last_name: req.body.last_name,
-         email: req.body.email
+         email: req.body.email,
       },
       { where: { id: req.body.id } },
       { limit: 1 }
@@ -110,7 +111,7 @@ employee.post('/edit', rf.verifyToken, (req, res) => {
             tdate
          );
          res.json({
-            error: 'An error occurred please contact the admin'
+            error: 'An error occurred please contact the admin',
          }).end();
          console.log(`error trying to update admin employee:  : ` + err);
       });
@@ -140,14 +141,12 @@ employee.post('/remove_employee', rf.verifyToken, (req, res) => {
          console.log(
             'Client Error @ EmployeeFunctions > remove_employee' + err
          );
-         res.status(404)
-            .send('Error Location 101')
-            .end();
+         res.status(404).send('Error Location 101').end();
       });
 });
 
 employee.post('/get_employees', rf.verifyToken, (req, res) => {
-   Employees.findAll()
+   Employees.findAll({ limit: 1000 })
       .then((data) => {
          //console.log(data)
          res.send(data);
@@ -164,16 +163,72 @@ employee.post('/get_employees', rf.verifyToken, (req, res) => {
             tdate
          );
          console.log('Client Error @ EmployeeFunctions > get_employees' + err);
+         res.status(404).send('Error Location 102').end();
+      });
+});
+
+employee.post('/get_details', rf.verifyToken, (req, res) => {
+   Salaries.findAll({
+      where: { emp_no: req.body.id },
+   })
+      .then((data1) => {
+         db.sequelize
+            .query(
+               `SELECT * FROM dept_emps  LEFT JOIN departments ON  dept_emps.dept_no=departments.dept_no WHERE dept_emps.emp_no= :emp_no`,
+               {
+                  replacements: {
+                     emp_no: req.body.id,
+                  },
+                  type: Sequelize.QueryTypes.SELECT,
+               }
+            )
+            .then((data2) => {
+               let obj = {
+                  departments: data2,
+                  salaries: data1,
+               };
+
+               res.send(obj);
+            })
+            .catch((err) => {
+               Logfn.log2db(
+                  500,
+                  fileName,
+                  'get_details',
+                  'catch',
+                  err,
+                  ip,
+                  req.headers.referer,
+                  tdate
+               );
+               console.log(
+                  'Client Error @ EmployeeFunctions > get_details 2' + err
+               );
+               res.status(404)
+                  .send('Server Error @ EmployeeFunctions > get_details 2')
+                  .end();
+            });
+      })
+      .catch((err) => {
+         console.log('Server Error @ EmployeeFunctions > get_details 1 ' + err);
+         Logfn.log2db(
+            500,
+            fileName,
+            'get_details',
+            'catch',
+            err,
+            ip,
+            req.headers.referer,
+            tdate
+         );
          res.status(404)
-            .send('Error Location 102')
+            .send('Server Error @ EmployeeFunctions > get_details 1')
             .end();
       });
 });
 
 employee.post('/islogged', rf.verifyToken, (req, res) => {
-   res.status(200)
-      .json(true)
-      .end();
+   res.status(200).json(true).end();
    // if false rf.verifyToken will send response -> res.status(403)
 });
 
