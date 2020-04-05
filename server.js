@@ -25,19 +25,20 @@ app.use(
       cookie: {
          secure: false,
          httpOnly: false,
-         path: '/'
-      }
+         path: '/',
+      },
    })
 );
 
 app.use(
    bodyParser.urlencoded({
-      extended: false
+      extended: false,
    })
 );
 
 var User = require('./routes/UserRoutes'),
    Employee = require('./routes/EmployeeRoutes'),
+   Department = require('./routes/DepartmentRoutes'),
    Dba = require('./routes/DbaRoutes'),
    Logs = require('./routes/LogRoutes');
 
@@ -45,6 +46,7 @@ app.use('/user', User);
 app.use('/dba', Dba);
 app.use('/logs', Logs);
 app.use('/employee', Employee);
+app.use('/department', Department);
 
 // serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
@@ -56,6 +58,6 @@ if (process.env.NODE_ENV === 'production') {
    });
 }
 
-app.listen(port, function() {
+app.listen(port, function () {
    console.log('Server is running on port: ' + port);
 });

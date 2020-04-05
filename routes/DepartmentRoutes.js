@@ -1,24 +1,24 @@
 const express = require('express'),
-   employee = express.Router(),
+   department = express.Router(),
    cors = require('cors'),
    bcrypt = require('bcrypt'),
    db = require('../database/db'),
    Sequelize = require('sequelize'),
-   Employees = require('../models/Employees'),
+   Departments = require('../models/Departments'),
    Salaries = require('../models/Salaries'),
    Logfn = require('../components/Logger'),
    rf = require('./RoutFuctions');
 //const CircularJSON = require('flatted');
 
-employee.use(cors());
+department.use(cors());
 
 let ip = '0.0.0.0'; // install ip tracker
 let tdate = Logfn.get_date();
 let fileName = __filename.split(/[\\/]/).pop();
 
-employee.post('/add', rf.verifyToken, (req, res) => {
+department.post('/add', rf.verifyToken, (req, res) => {
    var today = new Date();
-   const employeeData = {
+   const departmentData = {
       uuid: req.body.uuid,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
@@ -27,21 +27,21 @@ employee.post('/add', rf.verifyToken, (req, res) => {
       created: today,
    };
 
-   Employees.findOne({
+   Departments.findOne({
       where: {
          email: req.body.email,
          isdeleted: 0,
       },
    })
       //TODO bcrypt
-      .then((employee) => {
-         if (!employee) {
+      .then((department) => {
+         if (!department) {
             bcrypt.hash(req.body.password, 10, (err, hash) => {
-               employeeData.password = hash;
-               Employees.create(employeeData)
-                  .then((employee) => {
+               departmentData.password = hash;
+               Departments.create(departmentData)
+                  .then((department) => {
                      res.status(200)
-                        .json({ status: employee.email + 'Registered!' })
+                        .json({ status: department.email + 'Registered!' })
                         .end();
                   })
                   .catch((err) => {
@@ -59,12 +59,12 @@ employee.post('/add', rf.verifyToken, (req, res) => {
                         error: 'An error occurred please contact the admin',
                      }).end();
                      console.log(
-                        'Err (catch) /EmployeeRoutes/register: ' + err
+                        'Err (catch) /DepartmentRoutes/register: ' + err
                      );
                   });
             });
          } else {
-            res.json({ error: 'Employee already exists' }).end();
+            res.json({ error: 'Department already exists' }).end();
          }
       })
       .catch((err) => {
@@ -85,8 +85,8 @@ employee.post('/add', rf.verifyToken, (req, res) => {
       });
 });
 
-employee.post('/edit', rf.verifyToken, (req, res) => {
-   Employees.update(
+department.post('/edit', rf.verifyToken, (req, res) => {
+   Departments.update(
       {
          first_name: req.body.first_name,
          last_name: req.body.last_name,
@@ -113,13 +113,13 @@ employee.post('/edit', rf.verifyToken, (req, res) => {
          res.json({
             error: 'An error occurred please contact the admin',
          }).end();
-         console.log(`error trying to update admin employee:  : ` + err);
+         console.log(`error trying to update admin department:  : ` + err);
       });
 });
 
-employee.post('/remove_employee', rf.verifyToken, (req, res) => {
+department.post('/remove_department', rf.verifyToken, (req, res) => {
    console.log('req.body.theUuid = ' + JSON.stringify(req.body.id));
-   Employees.update(
+   Departments.update(
       { isDeleted: 1 },
       { returning: true, where: { id: req.body.id } }
    )
@@ -130,7 +130,7 @@ employee.post('/remove_employee', rf.verifyToken, (req, res) => {
          Logfn.log2db(
             500,
             fileName,
-            'remove_employee',
+            'remove_department',
             'catch',
             err,
             ip,
@@ -139,14 +139,14 @@ employee.post('/remove_employee', rf.verifyToken, (req, res) => {
          );
          id;
          console.log(
-            'Client Error @ EmployeeFunctions > remove_employee' + err
+            'Client Error @ DepartmentFunctions > remove_department' + err
          );
          res.status(404).send('Error Location 101').end();
       });
 });
 
-employee.post('/get_employees', rf.verifyToken, (req, res) => {
-   Employees.findAll({ limit: 10000 })
+department.post('/get_departments', rf.verifyToken, (req, res) => {
+   Departments.findAll({ limit: 1000 })
       .then((data) => {
          //console.log(data)
          res.send(data);
@@ -155,19 +155,21 @@ employee.post('/get_employees', rf.verifyToken, (req, res) => {
          Logfn.log2db(
             500,
             fileName,
-            'getemployees',
+            'getdepartments',
             'catch',
             err,
             ip,
             req.headers.referer,
             tdate
          );
-         console.log('Client Error @ EmployeeFunctions > get_employees' + err);
+         console.log(
+            'Client Error @ DepartmentFunctions > get_departments' + err
+         );
          res.status(404).send('Error Location 102').end();
       });
 });
 
-employee.post('/get_details', rf.verifyToken, (req, res) => {
+department.post('/get_details', rf.verifyToken, (req, res) => {
    Salaries.findAll({
       where: { emp_no: req.body.id },
    })
@@ -202,15 +204,17 @@ employee.post('/get_details', rf.verifyToken, (req, res) => {
                   tdate
                );
                console.log(
-                  'Client Error @ EmployeeFunctions > get_details 2' + err
+                  'Client Error @ DepartmentFunctions > get_details 2' + err
                );
                res.status(404)
-                  .send('Server Error @ EmployeeFunctions > get_details 2')
+                  .send('Server Error @ DepartmentFunctions > get_details 2')
                   .end();
             });
       })
       .catch((err) => {
-         console.log('Server Error @ EmployeeFunctions > get_details 1 ' + err);
+         console.log(
+            'Server Error @ DepartmentFunctions > get_details 1 ' + err
+         );
          Logfn.log2db(
             500,
             fileName,
@@ -222,14 +226,14 @@ employee.post('/get_details', rf.verifyToken, (req, res) => {
             tdate
          );
          res.status(404)
-            .send('Server Error @ EmployeeFunctions > get_details 1')
+            .send('Server Error @ DepartmentFunctions > get_details 1')
             .end();
       });
 });
 
-employee.post('/islogged', rf.verifyToken, (req, res) => {
+department.post('/islogged', rf.verifyToken, (req, res) => {
    res.status(200).json(true).end();
    // if false rf.verifyToken will send response -> res.status(403)
 });
 
-module.exports = employee;
+module.exports = department;
