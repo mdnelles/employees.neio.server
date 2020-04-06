@@ -146,9 +146,9 @@ department.post('/remove_department', rf.verifyToken, (req, res) => {
 });
 
 department.post('/get_departments', rf.verifyToken, (req, res) => {
+   console.log('DepartmentRoutes.get_sdepartments');
    Departments.findAll({ limit: 1000 })
       .then((data) => {
-         //console.log(data)
          res.send(data);
       })
       .catch((err) => {
@@ -166,6 +166,39 @@ department.post('/get_departments', rf.verifyToken, (req, res) => {
             'Client Error @ DepartmentFunctions > get_departments' + err
          );
          res.status(404).send('Error Location 102').end();
+      });
+});
+
+department.post('/get_employees_by_dept', rf.verifyToken, (req, res) => {
+   db.sequelize
+      .query(
+         `SELECT * FROM dept_emps  LEFT JOIN employees ON  dept_emps.emp_no=employees.emp_no WHERE dept_emps.dept_no= :dept_no LIMIT 250`,
+         {
+            replacements: {
+               dept_no: req.body.dept_no,
+            },
+            type: Sequelize.QueryTypes.SELECT,
+         }
+      )
+      .then((data) => {
+         //console.log(data)
+         res.send(data);
+      })
+      .catch((err) => {
+         Logfn.log2db(
+            500,
+            fileName,
+            'getemployees',
+            'catch',
+            err,
+            ip,
+            req.headers.referer,
+            tdate
+         );
+         console.log(
+            'Client Error @ DepartmnetRoutes.get_employees_by_dept' + err
+         );
+         res.status(404).send('DepartmnetRoutes.get_employees_by_dept').end();
       });
 });
 
