@@ -39,6 +39,7 @@ app.use(
 var User = require('./routes/UserRoutes'),
    Employee = require('./routes/EmployeeRoutes'),
    Department = require('./routes/DepartmentRoutes'),
+   DeptManagers = require('./routes/DeptManagerRoutes'),
    Dba = require('./routes/DbaRoutes'),
    Logs = require('./routes/LogRoutes');
 
@@ -47,6 +48,7 @@ app.use('/dba', Dba);
 app.use('/logs', Logs);
 app.use('/employee', Employee);
 app.use('/department', Department);
+app.use('/dept_manager', DeptManagers);
 
 // serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
