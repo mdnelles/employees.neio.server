@@ -50,6 +50,10 @@ title.post('/get_titles', rf.verifyToken, (req, res) => {
             type: Sequelize.QueryTypes.SELECT,
          }
       )
+      .then((data) => {
+         res.send(data);
+      })
+
       .catch((err) => {
          Logfn.log2db(
             500,
