@@ -41,6 +41,8 @@ var User = require('./routes/UserRoutes'),
    Department = require('./routes/DepartmentRoutes'),
    DeptManagers = require('./routes/DeptManagerRoutes'),
    Dba = require('./routes/DbaRoutes'),
+   Salary = require('./routes/SalaryRoutes'),
+   Title = require('./routes/TitleRoutes'),
    Logs = require('./routes/LogRoutes');
 
 app.use('/user', User);
@@ -48,6 +50,8 @@ app.use('/dba', Dba);
 app.use('/logs', Logs);
 app.use('/employee', Employee);
 app.use('/department', Department);
+app.use('/salary', Salary);
+app.use('/titles', Title);
 app.use('/dept_manager', DeptManagers);
 
 // serve static assets if in production
