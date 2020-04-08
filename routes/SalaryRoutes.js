@@ -16,20 +16,29 @@ let tdate = Logfn.get_date();
 let fileName = __filename.split(/[\\/]/).pop();
 
 salary.post('/get_salaries', rf.verifyToken, (req, res) => {
-   console.log('SalaryRoutes.get_salaries');
+   console.log('SalaryRoutes.get_salaries' + req.body);
+   let low = req.body.salaryRange;
+   let high = low + 2499;
    db.sequelize
       .query(
-         `   SELECT s.emp_no, 
+         ` SELECT s.emp_no, 
                     ANY_VALUE(salary) as any_salary,
+                    ANY_VALUE(from_date) as any_start,
+                    ANY_VALUE(to_date) as any_finish,
                     e.first_name,
                     e.last_name
                FROM salaries as s
                JOIN employees AS e ON
                     s.emp_no=e.emp_no
+                    WHERE s.salary > :low 
+                    AND s.salary < :high
                     GROUP BY s.emp_no
-                    ORDER BY any_salary
-               LIMIT 0, 500`,
+               LIMIT 20`,
          {
+            replacements: {
+               low: low,
+               high: high,
+            },
             type: Sequelize.QueryTypes.SELECT,
          }
       )
