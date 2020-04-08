@@ -33,7 +33,7 @@ salary.post('/get_salaries', rf.verifyToken, (req, res) => {
                     WHERE s.salary > :low 
                     AND s.salary < :high
                     GROUP BY s.emp_no
-               LIMIT 20`,
+               LIMIT 2000`,
          {
             replacements: {
                low: low,
