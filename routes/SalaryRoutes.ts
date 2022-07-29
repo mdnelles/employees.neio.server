@@ -1,22 +1,22 @@
-const express = require('express'),
-   salary = express.Router(),
-   cors = require('cors'),
-   bcrypt = require('bcrypt'),
-   db = require('../database/db'),
-   Sequelize = require('sequelize'),
-   Salaries = require('../models/Salaries'),
-   Logfn = require('../components/Logger'),
-   rf = require('./RoutFuctions');
+const expressSR = require("express"),
+   salary = expressSR.Router(),
+   cors = require("cors"),
+   bcrypt = require("bcrypt"),
+   db = require("../database/db"),
+   Sequelize = require("sequelize"),
+   Salaries = require("../models/Salaries"),
+   Logfn = require("../components/Logger"),
+   rf = require("./RoutFuctions");
 //const CircularJSON = require('flatted');
 
 salary.use(cors());
 
-let ip = '0.0.0.0'; // install ip tracker
+let ip = "0.0.0.0"; // install ip tracker
 let tdate = Logfn.get_date();
 let fileName = __filename.split(/[\\/]/).pop();
 
-salary.post('/get_salaries', rf.verifyToken, (req, res) => {
-   console.log('SalaryRoutes.get_salaries' + req.body);
+salary.post("/get_salaries", rf.verifyToken, (req: any, res: any) => {
+   console.log("SalaryRoutes.get_salaries" + req.body);
    let low = req.body.salaryRange;
    let high = low + 2499;
    db.sequelize
@@ -50,16 +50,16 @@ salary.post('/get_salaries', rf.verifyToken, (req, res) => {
          Logfn.log2db(
             500,
             fileName,
-            'getsalarys',
-            'catch',
+            "getsalarys",
+            "catch",
             err,
             ip,
             req.headers.referer,
             tdate
          );
-         console.log('Client Error @ SalaryFunctions > get_salarys' + err);
-         res.status(404).send('Error Location 102').end();
+         console.log("Client Error @ SalaryFunctions > get_salarys" + err);
+         res.status(404).send("Error Location 102").end();
       });
 });
 
-module.exports = salary;
+module.exports = { salary };
