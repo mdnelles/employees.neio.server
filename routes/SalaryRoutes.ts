@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 const salary = express.Router();
-import { db } from "../database/db";
 const Sequelize = require("sequelize");
+import { db } from "../database/db";
 import { verifyToken } from "./RoutFuctions";
 import { log2db } from "../components/Logger";
 import { ip, get_date } from "../components/Global";

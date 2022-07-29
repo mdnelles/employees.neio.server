@@ -1,12 +1,11 @@
 import express, { Request, Response } from "express";
 const title = express.Router();
-import { db } from "../database/db";
 const Sequelize = require("sequelize");
+import { db } from "../database/db";
 import { verifyToken } from "./RoutFuctions";
 import { Title } from "../models/Titles";
 import { Salarie } from "../models/Salaries";
 import { log2db } from "../components/Logger";
-
 import { ip, get_date } from "../components/Global";
 
 title.post(
