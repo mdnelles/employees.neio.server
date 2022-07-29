@@ -1,180 +1,147 @@
-const express = require("express"),
-   department = express.Router(),
-   cors = require("cors"),
-   bcrypt = require("bcrypt"),
-   db = require("../database/db"),
-   Sequelize = require("sequelize"),
-   Departments = require("../models/Departments"),
-   Salaries = require("../models/Salaries"),
-   Logfn = require("../components/Logger"),
-   rf = require("./RoutFuctions");
-//const CircularJSON = require('flatted');
+import express, { Request, Response } from "express";
+const department = express.Router();
+const Sequelize = require("sequelize");
+import cors from "cors";
+import bcrypt from "bcrypt";
+import { db } from "../database/db";
+import { verifyToken } from "./RoutFuctions";
+import { Departments } from "../models/Departments";
+import { Salarie } from "../models/Salaries";
+import { log2db } from "../components/Logger";
+import { ip, get_date } from "../components/Global";
 
 department.use(cors());
 
-let ip = "0.0.0.0"; // install ip tracker
-let tdate = Logfn.get_date();
-let fileName = __filename.split(/[\\/]/).pop();
+department.post("/add", verifyToken, async (req: Request, res: Response) => {
+   try {
+      const { uuid, first_name, last_name, email, password } = req.body;
+      var today = new Date();
+      const departmentData = {
+         first_name,
+         last_name,
+         email,
+         password,
+         created: today,
+      };
 
-department.post("/add", rf.verifyToken, (req: any, res: any) => {
-   var today = new Date();
-   const departmentData = {
-      uuid: req.body.uuid,
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      password: req.body.password,
-      created: today,
-   };
-
-   Departments.findOne({
-      where: {
-         email: req.body.email,
-         isdeleted: 0,
-      },
-   })
-      //TODO bcrypt
-      .then((department) => {
-         if (!department) {
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
-               departmentData.password = hash;
-               Departments.create(departmentData)
-                  .then((department) => {
-                     res.status(200)
-                        .json({ status: department.email + "Registered!" })
-                        .end();
-                  })
-                  .catch((err) => {
-                     Logfn.log2db(
-                        500,
-                        fileName,
-                        "register.1",
-                        "catch",
-                        err,
-                        ip,
-                        req.headers.referer,
-                        tdate
-                     );
-                     res.json({
-                        error: "An error occurred please contact the admin",
-                     }).end();
-                     console.log(
-                        "Err (catch) /DepartmentRoutes/register: " + err
-                     );
-                  });
-            });
-         } else {
-            res.json({ error: "Department already exists" }).end();
-         }
-      })
-      .catch((err) => {
-         Logfn.log2db(
-            500,
-            fileName,
-            "register.2",
-            "catch",
-            err,
-            ip,
-            req.headers.referer,
-            tdate
-         );
-         res.json({
-            error: "An error occurred please contact the admin",
-         }).end();
-         console.log("Err #116: " + err);
+      let department = await Departments.findOne({
+         where: {
+            email,
+            isdeleted: 0,
+         },
       });
+
+      if (!department) {
+         department = await bcrypt.hash(password, 10, (error, hash) => {
+            departmentData.password = hash;
+            let data = Departments.create(departmentData);
+            res.json({ status: 201, err: false, msg: "ok", data });
+         });
+      } else {
+         res.json({ status: 201, err: true, msg: "dept already exists" });
+      }
+   } catch (error) {
+      log2db(
+         500,
+         __filename.split(/[\\/]/).pop(),
+         "register.2",
+         "catch",
+         error,
+         ip,
+         req.headers.referer,
+         get_date()
+      );
+      console.log(error);
+      res.json({ status: 201, err: true, msg: "", error });
+   }
 });
 
-department.post("/edit", rf.verifyToken, (req: any, res: any) => {
-   Departments.update(
-      {
-         first_name: req.body.first_name,
-         last_name: req.body.last_name,
-         email: req.body.email,
-      },
-      { where: { id: req.body.id } },
-      { limit: 1 }
-   )
-
-      .then(() => {
-         res.send(200).end();
-      })
-      .catch((err) => {
-         Logfn.log2db(
-            500,
-            fileName,
-            "register.2",
-            "catch",
-            err,
-            ip,
-            req.headers.referer,
-            tdate
-         );
-         res.json({
-            error: "An error occurred please contact the admin",
-         }).end();
-         console.log(`error trying to update admin department:  : ` + err);
-      });
-});
-
-department.post("/remove_department", rf.verifyToken, (req: any, res: any) => {
-   console.log("req.body.theUuid = " + JSON.stringify(req.body.id));
-   Departments.update(
-      { isDeleted: 1 },
-      { returning: true, where: { id: req.body.id } }
-   )
-      .then((data) => {
-         res.send(data).end();
-      })
-      .catch((err) => {
-         Logfn.log2db(
-            500,
-            fileName,
-            "remove_department",
-            "catch",
-            err,
-            ip,
-            req.headers.referer,
-            tdate
-         );
-         id;
-         console.log(
-            "Client Error @ DepartmentFunctions > remove_department" + err
-         );
-         res.status(404).send("Error Location 101").end();
-      });
-});
-
-department.post("/get_departments", rf.verifyToken, (req: any, res: any) => {
-   console.log("DepartmentRoutes.get_sdepartments");
-   Departments.findAll({ limit: 1000 })
-      .then((data) => {
-         res.send(data);
-      })
-      .catch((err) => {
-         Logfn.log2db(
-            500,
-            fileName,
-            "getdepartments",
-            "catch",
-            err,
-            ip,
-            req.headers.referer,
-            tdate
-         );
-         console.log(
-            "Client Error @ DepartmentFunctions > get_departments" + err
-         );
-         res.status(404).send("Error Location 102").end();
-      });
+department.post("/edit", verifyToken, async (req: Request, res: Response) => {
+   try {
+      const { id, first_name, last_name, email } = req.body;
+      let data = await Departments.update(
+         {
+            first_name,
+            last_name,
+            email,
+         },
+         { where: { id } },
+         { limit: 1 }
+      );
+      res.json({ status: 201, err: false, msg: "ok", data });
+   } catch (error) {
+      log2db(
+         500,
+         __filename.split(/[\\/]/).pop(),
+         "register.2",
+         "catch",
+         error,
+         ip,
+         req.headers.referer,
+         get_date()
+      );
+      res.json({ status: 201, err: true, msg: "", error });
+      console.log(error);
+   }
 });
 
 department.post(
+   "/remove_department",
+   verifyToken,
+   async (req: Request, res: Response) => {
+      try {
+         let data = await Departments.update(
+            { isDeleted: 1 },
+            { returning: true, where: { id: req.body.id } }
+         );
+         res.json({ status: 201, err: false, msg: "ok", data });
+      } catch (error) {
+         log2db(
+            500,
+            __filename.split(/[\\/]/).pop(),
+            "remove_department",
+            "catch",
+            error,
+            ip,
+            req.headers.referer,
+            get_date()
+         );
+         console.log(error);
+         res.json({ status: 201, err: true, msg: "", error });
+      }
+   }
+);
+
+department.post(
+   "/get_departments",
+   verifyToken,
+   async (req: Request, res: Response) => {
+      try {
+         let data = await Departments.findAll({ limit: 1000 });
+         res.json({ status: 201, err: false, msg: "ok", data });
+      } catch (error) {
+         log2db(
+            500,
+            __filename.split(/[\\/]/).pop(),
+            "getdepartments",
+            "catch",
+            error,
+            ip,
+            req.headers.referer,
+            get_date()
+         );
+         console.log(error);
+         res.json({ status: 201, err: true, msg: "", error });
+      }
+   }
+);
+
+department.post(
    "/get_employees_by_dept",
-   rf.verifyToken,
-   (req: any, res: any) => {
-      db.sequelize
-         .query(
+   verifyToken,
+   async (req: Request, res: Response) => {
+      try {
+         let data = await db.sequelize.query(
             `SELECT * FROM dept_emps  LEFT JOIN employees ON  dept_emps.emp_no=employees.emp_no WHERE dept_emps.dept_no= :dept_no LIMIT 250`,
             {
                replacements: {
@@ -182,97 +149,65 @@ department.post(
                },
                type: Sequelize.QueryTypes.SELECT,
             }
-         )
-         .then((data) => {
-            //console.log(data)
-            res.send(data);
-         })
-         .catch((err) => {
-            Logfn.log2db(
-               500,
-               fileName,
-               "getemployees",
-               "catch",
-               err,
-               ip,
-               req.headers.referer,
-               tdate
-            );
-            console.log(
-               "Client Error @ DepartmnetRoutes.get_employees_by_dept" + err
-            );
-            res.status(404)
-               .send("DepartmnetRoutes.get_employees_by_dept")
-               .end();
-         });
+         );
+         res.json({ status: 201, err: false, msg: "", data });
+      } catch (error) {
+         log2db(
+            500,
+            __filename.split(/[\\/]/).pop(),
+            "getemployees",
+            "catch",
+            error,
+            ip,
+            req.headers.referer,
+            get_date()
+         );
+         console.log(error);
+         res.json({ status: 201, err: true, msg: "", error });
+      }
    }
 );
 
-department.post("/get_details", rf.verifyToken, (req: any, res: any) => {
-   Salaries.findAll({
-      where: { emp_no: req.body.id },
-   })
-      .then((data1) => {
-         db.sequelize
-            .query(
-               `SELECT * FROM dept_emps  LEFT JOIN departments ON  dept_emps.dept_no=departments.dept_no WHERE dept_emps.emp_no= :emp_no`,
-               {
-                  replacements: {
-                     emp_no: req.body.id,
-                  },
-                  type: Sequelize.QueryTypes.SELECT,
-               }
-            )
-            .then((data2) => {
-               let obj = {
-                  departments: data2,
-                  salaries: data1,
-               };
+department.post(
+   "/get_details",
+   verifyToken,
+   async (req: Request, res: Response) => {
+      try {
+         const { id } = req.body;
+         let data1 = await Salarie.findAll({
+            where: { emp_no: id },
+         });
 
-               res.send(obj);
-            })
-            .catch((err) => {
-               Logfn.log2db(
-                  500,
-                  fileName,
-                  "get_details",
-                  "catch",
-                  err,
-                  ip,
-                  req.headers.referer,
-                  tdate
-               );
-               console.log(
-                  "Client Error @ DepartmentFunctions > get_details 2" + err
-               );
-               res.status(404)
-                  .send("Server Error @ DepartmentFunctions > get_details 2")
-                  .end();
-            });
-      })
-      .catch((err) => {
-         console.log(
-            "Server Error @ DepartmentFunctions > get_details 1 " + err
+         let data2 = await db.sequelize.query(
+            `SELECT * FROM dept_emps  LEFT JOIN departments ON  dept_emps.dept_no=departments.dept_no WHERE dept_emps.emp_no= :emp_no`,
+            {
+               replacements: {
+                  emp_no: id,
+               },
+               type: Sequelize.QueryTypes.SELECT,
+            }
          );
-         Logfn.log2db(
+
+         let data = {
+            departments: data2,
+            salaries: data1,
+         };
+         res.json({ status: 201, err: false, msg: "", data });
+      } catch (error) {
+         log2db(
             500,
-            fileName,
+            __filename.split(/[\\/]/).pop(),
             "get_details",
             "catch",
-            err,
+            error,
             ip,
             req.headers.referer,
-            tdate
+            get_date()
          );
-         res.status(404)
-            .send("Server Error @ DepartmentFunctions > get_details 1")
-            .end();
-      });
-});
-
-department.post("/islogged", rf.verifyToken, (req: any, res: any) => {
-   res.status(200).json(true).end();
-   // if false rf.verifyToken will send response -> res.status(403)
-});
+         console.log(error);
+         res.json({ status: 201, err: true, msg: "", error });
+      }
+   }
+);
 
 module.exports = { department };
