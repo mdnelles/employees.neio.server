@@ -1,37 +1,37 @@
-const SequelizeLOG = require("sequelize");
-const dbLOG = require("../database/db.ts");
+import Sequelize from "sequelize";
+import { db } from "../database/db";
 
-module.exports = dbLOG.sequelize.define(
+module.exports = db.sequelize.define(
    "log",
    {
       id: {
-         type: SequelizeLOG.INTEGER,
+         type: Sequelize.INTEGER,
          primaryKey: true,
          autoIncrement: true,
       },
       filename: {
-         type: SequelizeLOG.STRING,
+         type: Sequelize.STRING,
       },
       code: {
-         type: SequelizeLOG.STRING,
+         type: Sequelize.STRING,
       },
       fnction: {
-         type: SequelizeLOG.STRING,
+         type: Sequelize.STRING,
       },
       msg_programmer: {
-         type: SequelizeLOG.STRING,
+         type: Sequelize.STRING,
       },
       msg_app: {
-         type: SequelizeLOG.STRING,
+         type: Sequelize.STRING,
       },
       ip: {
-         type: SequelizeLOG.STRING,
+         type: Sequelize.STRING,
       },
       refer: {
-         type: SequelizeLOG.STRING,
+         type: Sequelize.STRING,
       },
       tdate: {
-         type: SequelizeLOG.STRING,
+         type: Sequelize.STRING,
       },
    },
    {

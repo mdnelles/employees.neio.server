@@ -1,15 +1,15 @@
-const SequelizeSES = require("sequelize");
-const dbSES = require("../database/db.ts");
+import Sequelize from "sequelize";
+import { db } from "../database/db";
 
-module.exports = dbSES.sequelize.define(
+module.exports = db.sequelize.define(
    "departments",
    {
       dept_no: {
-         type: SequelizeSES.STRING,
+         type: Sequelize.STRING,
          primaryKey: true,
       },
       dept_name: {
-         type: SequelizeSES.STRING,
+         type: Sequelize.STRING,
       },
    },
    {

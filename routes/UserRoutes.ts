@@ -1,20 +1,13 @@
-const expressUserDB: any = require("express");
-const users = expressUserDB.Router(),
-   jwtUS = require("jsonwebtoken"),
-   bcrypt = require("bcrypt"),
-   LogfnUS = require("../components/Logger"),
-   UserDB = require("../models/User"),
-   rfuser: any = require("./RoutFuctions");
+import express, { Request, Response } from "express";
+const users = express.Router();
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import { verifyToken } from "./RoutFuctions";
+import { log2db } from "../components/Logger";
+import { ip, get_date } from "../components/Global";
+const User = require("../models/User");
 
-//const CircularJSON = require('flatted');
-
-//users.use(cors());
-
-let ipUSER = "0.0.0.0"; // install ipUSER tracker
-let tdateUS = LogfnUS.get_date();
-let fileNameUS = __filename.split(/[\\/]/).pop();
-
-users.post("/register", rfuser.verifyToken, async (req: any, res: any) => {
+users.post("/register", verifyToken, async (req: Request, res: Response) => {
    var today = new Date();
    const { uuid, first_name, last_name, email, password } = req.body;
 
@@ -28,7 +21,7 @@ users.post("/register", rfuser.verifyToken, async (req: any, res: any) => {
    };
 
    try {
-      let user = await UserDB.findOne({
+      let user = await User.findOne({
          where: {
             email: req.body.email,
             isdeleted: 0,
@@ -38,57 +31,57 @@ users.post("/register", rfuser.verifyToken, async (req: any, res: any) => {
       if (!user) {
          bcrypt.hash(req.body.password, 10, async (err: any, hash: any) => {
             userData.password = hash;
-            user = await UserDB.create(userData);
+            user = await User.create(userData);
             res.json({ status: 200, err: false, msg: "ok", user });
          });
       } else {
          res.json({ status: 200, err: true, msg: "user exists" });
       }
    } catch (error) {
-      LogfnUS.log2db(
+      log2db(
          500,
-         fileNameUS,
+         __filename.split(/[\\/]/).pop(),
          "register.2",
          "catch",
          error,
-         ipUSER,
+         ip,
          req.headers.referer,
-         tdateUS
+         get_date()
       );
       res.json({ status: 201, err: true, msg: "", error });
       console.log(error);
    }
 });
 
-users.post("/edit", rfuser.verifyToken, async (req: any, res: any) => {
+users.post("/edit", verifyToken, async (req: Request, res: Response) => {
    const { first_name, last_name, email } = req.body;
    try {
-      let user = await UserDB.update(
+      let user = await User.update(
          { first_name, last_name, email },
          { where: { id: req.body.id } },
          { limit: 1 }
       );
       res.json({ status: 200, err: false, msg: "user exists", user });
    } catch (error) {
-      LogfnUS.log2db(
+      log2db(
          500,
-         fileNameUS,
+         __filename.split(/[\\/]/).pop(),
          "register.2",
          "catch",
          error,
-         ipUSER,
+         ip,
          req.headers.referer,
-         tdateUS
+         get_date()
       );
       res.json({ status: 200, err: true, error });
       console.log(error);
    }
 });
 
-users.post("/login", async (req: any, res: any) => {
+users.post("/login", async (req: Request, res: Response) => {
    try {
       const { email, password } = req.body;
-      let user = await UserDB.findOne({ where: { email } });
+      let user = await User.findOne({ where: { email } });
 
       if (user) {
          // user exists in database now try to match password
@@ -98,7 +91,7 @@ users.post("/login", async (req: any, res: any) => {
             email === process.env.ADMIN_EMAIL
          ) {
             // successful login
-            let token = jwtUS.sign(user.dataValues, process.env.SECRET_KEY, {
+            let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
                expiresIn: 18000,
             });
             res.json({ status: 200, err: false, msg: "user exists", token });
@@ -109,24 +102,24 @@ users.post("/login", async (req: any, res: any) => {
          res.json({ status: 201, err: true, msg: "user does not exist" });
       }
    } catch (error) {
-      LogfnUS.log2db(
+      log2db(
          500,
-         fileNameUS,
+         __filename.split(/[\\/]/).pop(),
          "login failed",
          "login failed",
          error,
-         ipUSER,
+         ip,
          req.headers.referer,
-         tdateUS
+         get_date()
       );
       res.json({ status: 201, err: true, error });
    }
 });
 
-users.get("/adminpanel", rfuser.verifyToken, async (req: any, res: any) => {
+users.get("/adminpanel", verifyToken, async (req: Request, res: Response) => {
    try {
       const { id } = req.body;
-      let user = await UserDB.findOne({
+      let user = await User.findOne({
          where: {
             id,
          },
@@ -141,46 +134,46 @@ users.get("/adminpanel", rfuser.verifyToken, async (req: any, res: any) => {
    }
 });
 
-users.post("/remove_user", rfuser.verifyToken, async (req: any, res: any) => {
+users.post("/remove_user", verifyToken, async (req: Request, res: Response) => {
    try {
-      let data = await UserDB.update(
+      let data = await User.update(
          { isDeleted: 1 },
          { returning: true, where: { id: req.body.id } }
       );
       res.json({ status: 200, err: false, msg: "ok", data });
    } catch (error) {
-      LogfnUS.log2db(
+      log2db(
          500,
-         fileNameUS,
+         __filename.split(/[\\/]/).pop(),
          "remove_user",
          "catch",
          error,
-         ipUSER,
+         ip,
          req.headers.referer,
-         tdateUS
+         get_date()
       );
       res.json({ status: 201, err: true, msg: "", error });
    }
 });
 
-users.post("/getusers", rfuser.verifyToken, async (req: any, res: any) => {
+users.post("/getusers", verifyToken, async (req: Request, res: Response) => {
    try {
-      let data = UserDB.findAll({
+      let data = User.findAll({
          where: {
             isDeleted: 0,
          },
       });
       res.json({ status: 200, err: false, msg: "ok", data });
    } catch (error) {
-      LogfnUS.log2db(
+      log2db(
          500,
-         fileNameUS,
+         __filename.split(/[\\/]/).pop(),
          "getusers",
          "catch",
          error,
-         ipUSER,
+         ip,
          req.headers.referer,
-         tdateUS
+         get_date()
       );
       res.json({ status: 201, err: true, msg: "", error });
    }

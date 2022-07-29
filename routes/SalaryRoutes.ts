@@ -1,27 +1,20 @@
-const expressSR = require("express"),
-   salary = expressSR.Router(),
-   cors = require("cors"),
-   bcrypt = require("bcrypt"),
-   db = require("../database/db"),
-   Sequelize = require("sequelize"),
-   Salaries = require("../models/Salaries"),
-   Logfn = require("../components/Logger"),
-   rf = require("./RoutFuctions");
-//const CircularJSON = require('flatted');
+import express, { Request, Response } from "express";
+const salary = express.Router();
+import { db } from "../database/db";
+const Sequelize = require("sequelize");
+import { verifyToken } from "./RoutFuctions";
+import { log2db } from "../components/Logger";
+import { ip, get_date } from "../components/Global";
 
-salary.use(cors());
-
-let ip = "0.0.0.0"; // install ip tracker
-let tdate = Logfn.get_date();
-let fileName = __filename.split(/[\\/]/).pop();
-
-salary.post("/get_salaries", rf.verifyToken, (req: any, res: any) => {
-   console.log("SalaryRoutes.get_salaries" + req.body);
-   let low = req.body.salaryRange;
-   let high = low + 2499;
-   db.sequelize
-      .query(
-         ` SELECT s.emp_no, 
+salary.post(
+   "/get_salaries",
+   verifyToken,
+   async (req: Request, res: Response) => {
+      try {
+         let low = req.body.salaryRange;
+         let high = low + 2499;
+         const data = await db.sequelize.query(
+            ` SELECT s.emp_no, 
                     ANY_VALUE(salary) as any_salary,
                     ANY_VALUE(from_date) as any_start,
                     ANY_VALUE(to_date) as any_finish,
@@ -34,32 +27,31 @@ salary.post("/get_salaries", rf.verifyToken, (req: any, res: any) => {
                     AND s.salary < :high
                     GROUP BY s.emp_no
                LIMIT 2000`,
-         {
-            replacements: {
-               low: low,
-               high: high,
-            },
-            type: Sequelize.QueryTypes.SELECT,
-         }
-      )
+            {
+               replacements: {
+                  low: low,
+                  high: high,
+               },
+               type: Sequelize.QueryTypes.SELECT,
+            }
+         );
 
-      .then((data) => {
-         res.send(data);
-      })
-      .catch((err) => {
-         Logfn.log2db(
+         res.json({ status: 201, err: false, msg: "ok", data });
+      } catch (error) {
+         log2db(
             500,
-            fileName,
+            __filename.split(/[\\/]/).pop(),
             "getsalarys",
             "catch",
-            err,
+            error,
             ip,
             req.headers.referer,
-            tdate
+            get_date()
          );
-         console.log("Client Error @ SalaryFunctions > get_salarys" + err);
-         res.status(404).send("Error Location 102").end();
-      });
-});
+         console.log(error);
+         res.json({ status: 201, err: true, msg: "", error });
+      }
+   }
+);
 
 module.exports = { salary };
