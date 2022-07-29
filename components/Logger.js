@@ -1,6 +1,6 @@
-const Log = require('../models/Logs');
+const Log = require("../models/Logs");
 
-exports.log2db = (
+export const log2db = (
    code,
    filename,
    fnction,
@@ -10,11 +10,11 @@ exports.log2db = (
    refer,
    tdate
 ) => {
-   console.log(' >> inside log2db > msg_app = ' + msg_app);
+   console.log(" >> inside log2db > msg_app = " + msg_app);
    if (msg_app === undefined) {
-      msg_app = 'N/A';
+      msg_app = "N/A";
    } else {
-      msg_app = msg_app.toString().replace(/"/g, '``').replace(/'/g, '`');
+      msg_app = msg_app.toString().replace(/"/g, "``").replace(/'/g, "`");
    }
 
    msg_app = msg_app.toString().substring(0, 250);
@@ -32,24 +32,4 @@ exports.log2db = (
       tdate,
    };
    Log.create(logData);
-   //console.log('Data logged to DB: ' + logData);
-};
-
-exports.get_date = () => {
-   let d = new Date();
-   let month = parseInt(d.getMonth());
-   month += 1;
-   let tdate =
-      d.getDate() +
-      '-' +
-      month +
-      '-' +
-      d.getFullYear() +
-      ' - ' +
-      d.getHours() +
-      ':' +
-      d.getMinutes() +
-      ' ' +
-      d.getSeconds();
-   return tdate;
 };

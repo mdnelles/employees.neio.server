@@ -1,138 +1,102 @@
-const express = require("express"),
-   title = express.Router(),
-   cors = require("cors"),
-   bcrypt = require("bcrypt"),
-   db = require("../database/db"),
-   Sequelize = require("sequelize"),
-   Titles = require("../models/Titles"),
-   Salaries = require("../models/Salaries"),
-   Logfn = require("../components/Logger"),
-   rf = require("./RoutFuctions");
-//const CircularJSON = require('flatted');
+import express, { Request, Response } from "express";
+const title = express.Router();
+import { db } from "../database/db";
+const Sequelize = require("sequelize");
+import { verifyToken } from "./RoutFuctions";
+import { Title } from "../models/Titles";
+import { Salarie } from "../models/Salaries";
+import { log2db } from "../components/Logger";
 
-title.use(cors());
+import { ip, get_date } from "../components/Global";
 
-let ip = "0.0.0.0"; // install ip tracker
-let tdate = Logfn.get_date();
-
-title.post("/remove_title", rf.verifyToken, (req: any, res: any) => {
-   console.log("req.body.theUuid = " + JSON.stringify(req.body.id));
-   Titles.update(
-      { isDeleted: 1 },
-      { returning: true, where: { id: req.body.id } }
-   )
-      .then((data) => {
-         res.send(data).end();
-      })
-      .catch((err) => {
-         Logfn.log2db(
+title.post(
+   "/remove_title",
+   verifyToken,
+   async (req: Request, res: Response) => {
+      try {
+         let data = await Title.update(
+            { isDeleted: 1 },
+            { returning: true, where: { id: req.body.id } }
+         );
+         res.json({ status: 201, err: false, msg: "ok", data });
+      } catch (error) {
+         log2db(
             500,
-            fileName,
+            __filename.split(/[\\/]/).pop(),
             "remove_title",
             "catch",
-            err,
+            error,
             ip,
             req.headers.referer,
-            tdate
+            get_date()
          );
-         id;
-         console.log("Client Error @ TitleFunctions > remove_title" + err);
-         res.status(404).send("Error Location 101").end();
-      });
-});
+         console.log(error);
+         res.json({ status: 201, err: true, msg: "", error });
+      }
+   }
+);
 
-title.post("/get_titles", rf.verifyToken, (req: any, res: any) => {
-   console.log("TitleRoutes.get_titles");
-   db.sequelize
-      .query(
+title.post("/get_titles", verifyToken, async (req: Request, res: Response) => {
+   try {
+      let data = await db.sequelize.query(
          `select titles.title from employees.titles group by titles.title`,
          {
             type: Sequelize.QueryTypes.SELECT,
          }
-      )
-      .then((data) => {
-         res.send(data);
-      })
-
-      .catch((err) => {
-         Logfn.log2db(
-            500,
-            fileName,
-            "gettitles",
-            "catch",
-            err,
-            ip,
-            req.headers.referer,
-            tdate
-         );
-         console.log("Client Error @ TitleFunctions > get_titles" + err);
-         res.status(404).send("Error Location 102").end();
-      });
+      );
+      res.json({ status: 201, err: false, msg: "ok", data });
+   } catch (error) {
+      log2db(
+         500,
+         __filename.split(/[\\/]/).pop(),
+         "gettitles",
+         "catch",
+         error,
+         ip,
+         req.headers.referer,
+         get_date()
+      );
+      console.log(error);
+      res.json({ status: 201, err: true, msg: "", error });
+   }
 });
 
-title.post("/get_details", rf.verifyToken, (req: any, res: any) => {
-   Salaries.findAll({
-      where: { emp_no: req.body.id },
-   })
-      .then((data1) => {
-         db.sequelize
-            .query(
-               `SELECT * FROM dept_emps  LEFT JOIN titles ON  dept_emps.dept_no=titles.dept_no WHERE dept_emps.emp_no= :emp_no`,
-               {
-                  replacements: {
-                     emp_no: req.body.id,
-                  },
-                  type: Sequelize.QueryTypes.SELECT,
-               }
-            )
-            .then((data2) => {
-               let obj = {
-                  titles: data2,
-                  salaries: data1,
-               };
-
-               res.send(obj);
-            })
-            .catch((err) => {
-               Logfn.log2db(
-                  500,
-                  fileName,
-                  "get_details",
-                  "catch",
-                  err,
-                  ip,
-                  req.headers.referer,
-                  tdate
-               );
-               console.log(
-                  "Client Error @ TitleFunctions > get_details 2" + err
-               );
-               res.status(404)
-                  .send("Server Error @ TitleFunctions > get_details 2")
-                  .end();
-            });
-      })
-      .catch((err) => {
-         console.log("Server Error @ TitleFunctions > get_details 1 " + err);
-         Logfn.log2db(
-            500,
-            fileName,
-            "get_details",
-            "catch",
-            err,
-            ip,
-            req.headers.referer,
-            tdate
-         );
-         res.status(404)
-            .send("Server Error @ TitleFunctions > get_details 1")
-            .end();
+title.post("/get_details", verifyToken, async (req: Request, res: Response) => {
+   const { id } = req.body;
+   try {
+      let data1 = Salarie.findAll({
+         where: { emp_no: id },
       });
-});
+      let data2 = await db.sequelize.query(
+         `SELECT * FROM dept_emps  LEFT JOIN titles ON  dept_emps.dept_no=titles.dept_no WHERE dept_emps.emp_no= :emp_no`,
+         {
+            replacements: {
+               emp_no: id,
+            },
+            type: Sequelize.QueryTypes.SELECT,
+         }
+      );
 
-title.post("/islogged", rf.verifyToken, (req: any, res: any) => {
-   res.status(200).json(true).end();
-   // if false rf.verifyToken will send response -> res.status(403)
+      let obj = {
+         titles: data2,
+         salaries: data1,
+      };
+
+      res.json({ status: 201, err: false, msg: "ok", data: obj });
+   } catch (error) {
+      log2db(
+         500,
+         __filename.split(/[\\/]/).pop(),
+         "get_details",
+         "catch",
+         error,
+         ip,
+         req.headers.referer,
+         get_date()
+      );
+      console.log(error);
+      res.json({ status: 201, err: true, msg: "", error });
+   }
 });
 
 module.exports = { title };

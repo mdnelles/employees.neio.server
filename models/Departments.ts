@@ -1,16 +1,16 @@
-const SequelizeDP: any = require("Sequelize");
-const dbDP: any = require("../database/db.ts");
+import Sequelize from "sequelize";
+import { db } from "../database/db";
 
-module.exports = dbDP.SequelizeDP.define(
+module.exports = db.Sequelize.define(
    "department",
    {
       dept_no: {
-         type: SequelizeDP.INTEGER,
+         type: Sequelize.INTEGER,
          primaryKey: true,
          autoIncrement: true,
       },
       dept_name: {
-         type: SequelizeDP.STRING,
+         type: Sequelize.STRING,
       },
    },
    {

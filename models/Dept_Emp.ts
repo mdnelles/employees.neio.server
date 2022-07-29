@@ -1,27 +1,27 @@
-import SequelizeDT from "Sequelize";
-const dbDT = require("../database/db.ts");
+import Sequelize from "sequelize";
+import { db } from "../database/db";
 
-module.exports = dbDT.SequelizeDT.define(
+module.exports = db.Sequelize.define(
    "dept_emp",
    {
       emp_no: {
-         type: SequelizeDT.INTEGER,
+         type: Sequelize.INTEGER,
          primaryKey: true,
          allowNull: false,
       },
       dept_no: {
-         type: SequelizeDT.STRING,
+         type: Sequelize.STRING,
          primaryKey: true,
          allowNull: false,
       },
       from_date: {
-         type: SequelizeDT.DATE,
-         defaultValue: SequelizeDT.NOW,
+         type: Sequelize.DATE,
+         defaultValue: Sequelize.NOW,
          allowNull: false,
       },
       to_date: {
-         type: SequelizeDT.DATE,
-         defaultValue: SequelizeDT.NOW,
+         type: Sequelize.DATE,
+         defaultValue: Sequelize.NOW,
          allowNull: false,
       },
    },

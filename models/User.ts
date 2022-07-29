@@ -1,39 +1,39 @@
-const SequelizeUSER = require("sequelize");
-const dbUSER = require("../database/db.ts");
+import Sequelize from "sequelize";
+import { db } from "../database/db";
 
-module.exports = dbUSER.sequelize.define(
+export const User = db.sequelize.define(
    "user",
    {
       id: {
-         type: SequelizeUSER.INTEGER,
+         type: Sequelize.INTEGER,
          primaryKey: true,
          autoIncrement: true,
       },
       email: {
-         type: SequelizeUSER.STRING,
+         type: Sequelize.STRING,
       },
       password: {
-         type: SequelizeUSER.STRING,
+         type: Sequelize.STRING,
       },
       first_name: {
-         type: SequelizeUSER.STRING,
+         type: Sequelize.STRING,
       },
       last_name: {
-         type: SequelizeUSER.STRING,
+         type: Sequelize.STRING,
       },
       admin: {
-         type: SequelizeUSER.INTEGER,
+         type: Sequelize.INTEGER,
       },
       last_login: {
-         type: SequelizeUSER.DATE,
-         defaultValue: SequelizeUSER.NOW,
+         type: Sequelize.DATE,
+         defaultValue: Sequelize.NOW,
       },
       isDeleted: {
-         type: SequelizeUSER.INTEGER,
+         type: Sequelize.INTEGER,
          defaultValue: 0,
       },
       uuid: {
-         type: SequelizeUSER.STRING,
+         type: Sequelize.STRING,
       },
    },
    {

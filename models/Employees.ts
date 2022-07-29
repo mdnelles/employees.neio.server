@@ -1,36 +1,36 @@
-const SequelizeER1 = require("Sequelize");
-let DB = require("../database/db.ts");
+import Sequelize from "sequelize";
+import { db } from "../database/db";
 
-DB.SequelizeER1.define(
+module.exports = db.Sequelize.define(
    "employee",
    {
       emp_no: {
-         type: SequelizeER1.INTEGER,
+         type: Sequelize.INTEGER,
          primaryKey: true,
          allowNull: false,
       },
       birth_date: {
-         type: SequelizeER1.DATE,
+         type: Sequelize.DATE,
          allowNull: false,
       },
       first_name: {
-         type: SequelizeER1.STRING,
+         type: Sequelize.STRING,
          defaultValue: "fn",
          allowNull: false,
       },
       last_name: {
-         type: SequelizeER1.STRING,
+         type: Sequelize.STRING,
          defaultValue: "ln",
          allowNull: false,
       },
       gender: {
-         type: SequelizeER1.STRING,
+         type: Sequelize.STRING,
          values: ["M", "F", "X"],
          allowNull: false,
       },
       hire_date: {
-         type: SequelizeER1.DATE,
-         defaultValue: SequelizeER1.NOW,
+         type: Sequelize.DATE,
+         defaultValue: Sequelize.NOW,
          allowNull: false,
       },
    },
@@ -38,4 +38,3 @@ DB.SequelizeER1.define(
       timestamps: false,
    }
 );
-module.exports = { employee };

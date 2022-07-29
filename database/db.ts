@@ -1,5 +1,5 @@
-const Sequelize = require("sequelize");
-let db: any = {};
+import { Sequelize } from "sequelize";
+export const db: any = {};
 const sequelize = new Sequelize(
    process.env.NODE_DB_NAME,
    process.env.NODE_DB_USER,
@@ -21,5 +21,3 @@ const sequelize = new Sequelize(
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
-module.exports = { db };

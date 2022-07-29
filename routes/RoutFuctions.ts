@@ -1,90 +1,57 @@
-const jwt = require("jsonwebtoken");
-const LogfnRF = require("../components/Logger");
+import jwt from "jsonwebtoken";
+import { log2db } from "../components/Logger";
+import { Request, Response, NextFunction } from "express";
+import { ip, get_date } from "../components/Global";
 
-const get_date = () => {
-   let d: any = new Date();
-   let month = parseInt(d.getMonth());
-   month += 1;
-   let tdate =
-      d.getDate() +
-      "-" +
-      month +
-      "-" +
-      d.getFullYear() +
-      " - " +
-      d.getHours() +
-      ":" +
-      d.getMinutes() +
-      " " +
-      d.getSeconds();
-   return tdate;
-};
-
-let ip = "0.0.0.0";
-let tdate = get_date();
-let fileName = __filename.split(/[\\/]/).pop();
-
-const tokenTest = (token: any, res: any, jwt: any, caller: any, next: any) => {
-   jwt.verify(token, process.env.SECRET_KEY, (err: any) => {
-      if (err) {
-         LogfnRF.log2db(
+const tokenTest = (
+   token: string,
+   res: Response,
+   jwt: any,
+   caller: any,
+   next: NextFunction
+) => {
+   jwt.verify(token, process.env.SECRET_KEY, (error: any) => {
+      if (error) {
+         log2db(
             500,
-            fileName,
+            __filename.split(/[\\/]/).pop(),
             "Token Test",
             "bad token",
-            err,
+            error,
             ip,
             caller,
-            tdate
+            get_date()
          );
-         console.log(
-            " /// " +
-               caller +
-               " failed -> token not verified: " +
-               err +
-               "\n==token=>" +
-               token
-         );
-         // this will send forbidden 403 response
-         res.sendStatus(403);
+         console.log("bad token: " + token);
+         res.json({ status: 201, err: true, msg: "bad token", error });
       } else {
-         LogfnRF.log2db(
+         log2db(
             200,
-            fileName,
+            __filename.split(/[\\/]/).pop(),
             "Token Test",
             "Token accepted",
             "",
             ip,
             caller,
-            tdate
+            get_date()
          );
-         console.log("token ok caller -> " + caller);
          next(); // Next middleware
       }
    });
 };
 
-exports.verifyToken = function (req: any, res: any, next: any) {
-   if (req.body.token !== undefined) {
-      var caller = "";
-      if (req.body.caller !== undefined) caller = req.body.caller;
-      tokenTest(req.body.token, res, jwt, caller, next);
-   } else {
-      // attempt to extract xhr authorization from header as last resort
+export const verifyToken = (
+   req: Request,
+   res: Response,
+   next: NextFunction
+) => {
+   try {
+      const token = req.body.token || req.headers.token || null;
+      const caller = req.body.caller || req.headers.referer || null;
 
-      if (req.headers.token !== undefined) {
-         var token = req.headers.token;
-         var caller = "";
-         if (req.headers.caller !== undefined) caller = req.headers.caller;
-         tokenTest(req.headers.token, res, jwt, caller, next);
-      } else {
-         console.log(
-            "fail -> token == undefined | caller-> " +
-               req.body.caller +
-               " | token=" +
-               req.body.token
-         );
-         res.sendStatus(403);
-      }
+      tokenTest(token, res, jwt, caller, next);
+   } catch (error) {
+      console.log(error);
+      res.json({ status: 201, err: true, msg: "bad token", error });
    }
 };

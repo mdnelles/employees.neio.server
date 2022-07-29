@@ -1,27 +1,27 @@
-const SequelizeSAL = require("sequelize");
-const dbSAL = require("../database/db.ts");
+import Sequelize from "sequelize";
+import { db } from "../database/db";
 
-module.exports = dbSAL.sequelize.define(
-   "salarie",
+export const Salarie = db.sequelize.define(
+   "Salarie",
    {
       emp_no: {
-         type: SequelizeSAL.INTEGER,
+         type: Sequelize.INTEGER,
          primaryKey: true,
          allowNull: false,
       },
       salary: {
-         type: SequelizeSAL.INTEGER,
+         type: Sequelize.INTEGER,
          allowNull: false,
       },
       from_date: {
-         type: SequelizeSAL.DATE,
-         defaultValue: SequelizeSAL.NOW,
+         type: Sequelize.DATE,
+         defaultValue: Sequelize.NOW,
          primaryKey: true,
          allowNull: false,
       },
       to_date: {
-         type: SequelizeSAL.DATE,
-         defaultValue: SequelizeSAL.NOW,
+         type: Sequelize.DATE,
+         defaultValue: Sequelize.NOW,
          allowNull: false,
       },
    },
