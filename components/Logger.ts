@@ -1,17 +1,17 @@
 const Log = require("../models/Logs");
 
-export const log2db = (
-   code,
-   filename,
-   fnction,
-   msg_programmer,
-   msg_app,
-   ip,
-   refer,
-   tdate
+const log2db = (
+   code: number,
+   filename: string | undefined,
+   fnction: string,
+   msg_programmer: string,
+   msg_app: string | undefined,
+   ip: string,
+   refer: string | undefined,
+   tdate: string
 ) => {
    console.log(" >> inside log2db > msg_app = " + msg_app);
-   if (msg_app === undefined) {
+   if (!msg_app) {
       msg_app = "N/A";
    } else {
       msg_app = msg_app.toString().replace(/"/g, "``").replace(/'/g, "`");
@@ -32,4 +32,6 @@ export const log2db = (
       tdate,
    };
    Log.create(logData);
+   return true;
 };
+export default log2db;

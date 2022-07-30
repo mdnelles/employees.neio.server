@@ -1,8 +1,8 @@
-export const ip = "0.0.0.0"; // install ipUSER tracker
-export const fileName = __filename.split(/[\\/]/).pop();
-export const get_date = () => {
-   let d = new Date();
-   let month = parseInt(d.getMonth());
+export const ip: string = "0.0.0.0";
+export const getDate = () => {
+   let d: Date = new Date();
+   //ts-ignore
+   let month: number = d.getMonth();
    month += 1;
    let tdate =
       d.getDate() +

@@ -3,9 +3,9 @@ const users = express.Router();
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { verifyToken } from "./RoutFuctions";
-import { log2db } from "../components/Logger";
-import { ip, get_date } from "../components/Global";
-const User = require("../models/User");
+import log2db from "../components/Logger";
+import { ip, getDate } from "../components/Global";
+import { User } from "../models/User";
 
 users.post("/register", verifyToken, async (req: Request, res: Response) => {
    var today = new Date();
@@ -46,7 +46,7 @@ users.post("/register", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       res.json({ status: 201, err: true, msg: "", error });
       console.log(error);
@@ -71,7 +71,7 @@ users.post("/edit", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       res.json({ status: 200, err: true, error });
       console.log(error);
@@ -110,7 +110,7 @@ users.post("/login", async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       res.json({ status: 201, err: true, error });
    }
@@ -150,7 +150,7 @@ users.post("/remove_user", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       res.json({ status: 201, err: true, msg: "", error });
    }
@@ -173,7 +173,7 @@ users.post("/getusers", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       res.json({ status: 201, err: true, msg: "", error });
    }

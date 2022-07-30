@@ -5,8 +5,8 @@ import { db } from "../database/db";
 import { verifyToken } from "./RoutFuctions";
 import { Title } from "../models/Titles";
 import { Salarie } from "../models/Salaries";
-import { log2db } from "../components/Logger";
-import { ip, get_date } from "../components/Global";
+import log2db from "../components/Logger";
+import { ip, getDate } from "../components/Global";
 
 title.post(
    "/remove_title",
@@ -27,7 +27,7 @@ title.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          console.log(error);
          res.json({ status: 201, err: true, msg: "", error });
@@ -53,7 +53,7 @@ title.post("/get_titles", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       console.log(error);
       res.json({ status: 201, err: true, msg: "", error });
@@ -91,7 +91,7 @@ title.post("/get_details", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       console.log(error);
       res.json({ status: 201, err: true, msg: "", error });

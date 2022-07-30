@@ -7,8 +7,8 @@ import { db } from "../database/db";
 import { verifyToken } from "./RoutFuctions";
 import { Departments } from "../models/Departments";
 import { Salarie } from "../models/Salaries";
-import { log2db } from "../components/Logger";
-import { ip, get_date } from "../components/Global";
+import log2db from "../components/Logger";
+import { ip, getDate } from "../components/Global";
 
 department.use(cors());
 
@@ -49,7 +49,7 @@ department.post("/add", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       console.log(error);
       res.json({ status: 201, err: true, msg: "", error });
@@ -78,7 +78,7 @@ department.post("/edit", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       res.json({ status: 201, err: true, msg: "", error });
       console.log(error);
@@ -104,7 +104,7 @@ department.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          console.log(error);
          res.json({ status: 201, err: true, msg: "", error });
@@ -128,7 +128,7 @@ department.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          console.log(error);
          res.json({ status: 201, err: true, msg: "", error });
@@ -160,7 +160,7 @@ department.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          console.log(error);
          res.json({ status: 201, err: true, msg: "", error });
@@ -202,7 +202,7 @@ department.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          console.log(error);
          res.json({ status: 201, err: true, msg: "", error });

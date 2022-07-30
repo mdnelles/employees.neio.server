@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import { log2db } from "../components/Logger";
+import log2db from "../components/Logger";
 import { Request, Response, NextFunction } from "express";
-import { ip, get_date } from "../components/Global";
+import { ip, getDate } from "../components/Global";
 
 const tokenTest = (
    token: string,
@@ -20,7 +20,7 @@ const tokenTest = (
             error,
             ip,
             caller,
-            get_date()
+            getDate()
          );
          console.log("bad token: " + token);
          res.json({ status: 201, err: true, msg: "bad token", error });
@@ -33,7 +33,7 @@ const tokenTest = (
             "",
             ip,
             caller,
-            get_date()
+            getDate()
          );
          next(); // Next middleware
       }

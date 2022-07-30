@@ -1,7 +1,7 @@
 import Sequelize from "sequelize";
 import { db } from "../database/db";
 
-export const Departments = db.Sequelize.define(
+export const Departments = db.sequelize.define(
    "department",
    {
       dept_no: {

@@ -7,8 +7,8 @@ import { db } from "../database/db";
 import { verifyToken } from "./RoutFuctions";
 import { Employees } from "../models/Employees";
 import { Salarie } from "../models/Salaries";
-import { log2db } from "../components/Logger";
-import { ip, get_date } from "../components/Global";
+import log2db from "../components/Logger";
+import { ip, getDate } from "../components/Global";
 
 employee.use(cors());
 
@@ -50,7 +50,7 @@ employee.post("/add", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       res.json({ status: 200, err: true, msg: "", error });
       console.log(error);
@@ -79,7 +79,7 @@ employee.post("/edit", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       res.json({ status: 200, err: true, msg: "catch", error });
       console.log(error);
@@ -106,7 +106,7 @@ employee.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          res.json({ status: 200, err: true, msg: "user exists", error });
       }
@@ -129,7 +129,7 @@ employee.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          res.json({ status: 201, err: true, msg: "user exists", error });
       }
@@ -170,7 +170,7 @@ employee.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          res.json({ status: 200, err: true, msg: "", error });
          console.log(error);
