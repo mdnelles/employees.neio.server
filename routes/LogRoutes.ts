@@ -3,8 +3,8 @@ const logs = express.Router();
 const Sequelize = require("sequelize");
 import { db } from "../database/db";
 import { verifyToken } from "./RoutFuctions";
-import { log2db } from "../components/Logger";
-import { ip, get_date } from "../components/Global";
+import log2db from "../components/Logger";
+import { ip, getDate } from "../components/Global";
 const User = require("../models/User");
 
 logs.post("/get_logs", verifyToken, async (req: Request, res: Response) => {
@@ -36,7 +36,7 @@ logs.post("/get_logs", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       console.log(error);
       res.json({ status: 201, err: true, msg: "", error });
@@ -71,7 +71,7 @@ logs.post("/get_logcount", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       console.log(error);
       res.json({ status: 201, err: true, msg: "", error });

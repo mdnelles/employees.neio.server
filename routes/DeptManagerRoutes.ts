@@ -7,8 +7,8 @@ import { db } from "../database/db";
 import { verifyToken } from "./RoutFuctions";
 import { DeptManagers } from "../models/DeptManager";
 import { Salarie } from "../models/Salaries";
-import { log2db } from "../components/Logger";
-import { ip, get_date } from "../components/Global";
+import log2db from "../components/Logger";
+import { ip, getDate } from "../components/Global";
 
 dept_manager.post("/add", verifyToken, async (req: Request, res: Response) => {
    try {
@@ -53,7 +53,7 @@ dept_manager.post("/add", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       res.json({ status: 201, err: true, msg: "", error });
       console.log(error);
@@ -82,7 +82,7 @@ dept_manager.post("/edit", verifyToken, async (req: Request, res: Response) => {
          error,
          ip,
          req.headers.referer,
-         get_date()
+         getDate()
       );
       res.json({ status: 201, err: true, msg: "", error });
       console.log(error);
@@ -108,7 +108,7 @@ dept_manager.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          console.log(error);
          res.json({ status: 201, err: true, msg: "", error });
@@ -150,7 +150,7 @@ dept_manager.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          console.log(error);
          res.json({ status: 201, err: true, msg: "", error });
@@ -194,7 +194,7 @@ dept_manager.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          console.log(error);
          res.json({ status: 201, err: true, msg: "", error });
@@ -237,7 +237,7 @@ dept_manager.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          console.log(error);
          res.json({ status: 201, err: true, msg: "", error });

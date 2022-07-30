@@ -3,8 +3,8 @@ const salary = express.Router();
 const Sequelize = require("sequelize");
 import { db } from "../database/db";
 import { verifyToken } from "./RoutFuctions";
-import { log2db } from "../components/Logger";
-import { ip, get_date } from "../components/Global";
+import log2db from "../components/Logger";
+import { ip, getDate } from "../components/Global";
 
 salary.post(
    "/get_salaries",
@@ -46,7 +46,7 @@ salary.post(
             error,
             ip,
             req.headers.referer,
-            get_date()
+            getDate()
          );
          console.log(error);
          res.json({ status: 201, err: true, msg: "", error });

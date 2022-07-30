@@ -8,7 +8,6 @@ const sequelize = new Sequelize(
       host: process.env.NODE_DB_HOST,
       dialect: "mysql",
       logging: console.log,
-      freezeTableName: true,
 
       pool: {
          max: 5,
