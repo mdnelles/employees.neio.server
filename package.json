@@ -25,10 +25,11 @@
    "dependencies": {
       "array-sort": "^1.0.0",
       "bcrypt": "^5.0.1",
-      "body-parser": "*",
+      "body-parser": "^1.20.0",
       "concurrently": "*",
       "cookie-parser": "^1.4.6",
       "cors": "*",
+      "dotenv": "^16.0.1",
       "express": "*",
       "express-fileupload": "^1.4.0",
       "express-session": "^1.17.3",

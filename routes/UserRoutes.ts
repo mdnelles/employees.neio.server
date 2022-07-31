@@ -1,13 +1,14 @@
+require("dotenv").config({ path: __dirname + "/.env" });
 import express, { Request, Response } from "express";
 const users = express.Router();
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { verifyToken } from "./RoutFuctions";
+import { verifyToken } from "../components/RoutFuctions";
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 import { User } from "../models/User";
 
-users.post("/register", verifyToken, async (req: Request, res: Response) => {
+users.post("/register", async (req: Request, res: Response) => {
    var today = new Date();
    const { uuid, first_name, last_name, email, password } = req.body;
 
@@ -91,8 +92,8 @@ users.post("/login", async (req: Request, res: Response) => {
             email === process.env.ADMIN_EMAIL
          ) {
             // successful login
-            let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
-               expiresIn: 18000,
+            let token = jwt.sign(user.dataValues, process.env.NODE_SECRET, {
+               expiresIn: 60 * 60 * 24 * 30,
             });
             res.json({ status: 200, err: false, msg: "user exists", token });
          } else {
@@ -179,4 +180,4 @@ users.post("/getusers", verifyToken, async (req: Request, res: Response) => {
    }
 });
 
-module.exports = { users };
+module.exports = users;

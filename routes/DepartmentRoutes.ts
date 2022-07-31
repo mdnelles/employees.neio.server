@@ -4,7 +4,7 @@ const Sequelize = require("sequelize");
 import cors from "cors";
 import bcrypt from "bcrypt";
 import { db } from "../database/db";
-import { verifyToken } from "./RoutFuctions";
+import { verifyToken } from "../components/RoutFuctions";
 import { Departments } from "../models/Departments";
 import { Salarie } from "../models/Salaries";
 import log2db from "../components/Logger";
@@ -210,4 +210,4 @@ department.post(
    }
 );
 
-module.exports = { department };
+module.exports = department;

@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 const salary = express.Router();
 const Sequelize = require("sequelize");
 import { db } from "../database/db";
-import { verifyToken } from "./RoutFuctions";
+import { verifyToken } from "../components/RoutFuctions";
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 
@@ -54,4 +54,4 @@ salary.post(
    }
 );
 
-module.exports = { salary };
+module.exports = salary;
