@@ -1,3 +1,4 @@
+require("dotenv").config({ path: __dirname + "/.env" });
 import { Sequelize } from "sequelize";
 export const db: any = {};
 const sequelize = new Sequelize(

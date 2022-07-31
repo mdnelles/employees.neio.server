@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 const title = express.Router();
 const Sequelize = require("sequelize");
 import { db } from "../database/db";
-import { verifyToken } from "./RoutFuctions";
+import { verifyToken } from "../components/RoutFuctions";
 import { Title } from "../models/Titles";
 import { Salarie } from "../models/Salaries";
 import log2db from "../components/Logger";
@@ -98,4 +98,4 @@ title.post("/get_details", verifyToken, async (req: Request, res: Response) => {
    }
 });
 
-module.exports = { title };
+module.exports = title;

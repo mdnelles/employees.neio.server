@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 const logs = express.Router();
 const Sequelize = require("sequelize");
 import { db } from "../database/db";
-import { verifyToken } from "./RoutFuctions";
+import { verifyToken } from "../components/RoutFuctions";
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 const User = require("../models/User");
@@ -78,4 +78,4 @@ logs.post("/get_logcount", verifyToken, async (req: Request, res: Response) => {
    }
 });
 
-module.exports = { logs };
+module.exports = logs;

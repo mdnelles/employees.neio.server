@@ -1,21 +1,27 @@
+require("dotenv").config({ path: __dirname + "/.env" });
 import express from "express";
-const app = express();
+import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
-
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
+const app = express();
 const port = process.env.NODE_PORT || 5010;
 
 app.use(cors());
 app.use(express.json());
+var jsonParser = bodyParser.json();
+app.use(jsonParser);
+app.use(urlencodedParser);
+
 app.use(helmet());
 
-const UserRout = require("./routes/UserRoutes"),
-   EmployeeRout = require("./routes/EmployeeRoutes"),
-   DepartmentRout = require("./routes/DepartmentRoutes"),
-   DeptManagersRout = require("./routes/DeptManagerRoutes"),
-   SalaryRout = require("./routes/SalaryRoutes"),
-   TitleRout = require("./routes/TitleRoutes"),
-   LogsRout = require("./routes/LogRoutes");
+const UserRout = require("./routes/UserRoutes");
+const EmployeeRout = require("./routes/EmployeeRoutes");
+const DepartmentRout = require("./routes/DepartmentRoutes");
+const DeptManagersRout = require("./routes/DeptManagerRoutes");
+const SalaryRout = require("./routes/SalaryRoutes");
+const TitleRout = require("./routes/TitleRoutes");
+const LogsRout = require("./routes/LogRoutes");
 
 app.use("/user", UserRout);
 app.use("/logs", LogsRout);

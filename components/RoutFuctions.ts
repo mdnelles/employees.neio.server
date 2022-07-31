@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import log2db from "../components/Logger";
+import log2db from "./Logger";
 import { Request, Response, NextFunction } from "express";
-import { ip, getDate } from "../components/Global";
+import { ip, getDate } from "./Global";
 
 const tokenTest = (
    token: string,
@@ -10,7 +10,7 @@ const tokenTest = (
    caller: any,
    next: NextFunction
 ) => {
-   jwt.verify(token, process.env.SECRET_KEY, (error: any) => {
+   jwt.verify(token, process.env.NODE_SECRET, (error: any) => {
       if (error) {
          log2db(
             500,
