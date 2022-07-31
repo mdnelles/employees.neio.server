@@ -11,7 +11,7 @@ salary.post(
    verifyToken,
    async (req: Request, res: Response) => {
       try {
-         let low = req.body.salaryRange;
+         let low = req.body.salaryRange || 50000;
          let high = low + 2499;
          const data = await db.sequelize.query(
             ` SELECT s.emp_no, 
