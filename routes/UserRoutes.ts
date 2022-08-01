@@ -3,7 +3,7 @@ import express, { Request, Response } from "express";
 const users = express.Router();
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { verifyToken } from "../components/RoutFuctions";
+import { verifyToken, verifyTokenAdmin } from "../components/RoutFuctions";
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 import { User } from "../models/User";
@@ -30,7 +30,7 @@ users.post("/register", async (req: Request, res: Response) => {
       });
 
       if (!user) {
-         bcrypt.hash(req.body.password, 10, async (err: any, hash: any) => {
+         bcrypt.hash(password, 10, async (err: any, hash: any) => {
             userData.password = hash;
             user = await User.create(userData);
             res.json({ status: 200, err: false, msg: "ok", user });
@@ -54,7 +54,7 @@ users.post("/register", async (req: Request, res: Response) => {
    }
 });
 
-users.post("/edit", verifyToken, async (req: Request, res: Response) => {
+users.post("/edit", verifyTokenAdmin, async (req: Request, res: Response) => {
    const { first_name, last_name, email } = req.body;
    try {
       let user = await User.update(
@@ -135,7 +135,7 @@ users.get("/adminpanel", verifyToken, async (req: Request, res: Response) => {
    }
 });
 
-users.post("/remove_user", verifyToken, async (req: Request, res: Response) => {
+users.post("/del", verifyTokenAdmin, async (req: Request, res: Response) => {
    try {
       let data = await User.update(
          { isDeleted: 1 },
