@@ -1,14 +1,12 @@
 require("dotenv").config({ path: __dirname + "/.env" });
-import express, { Request, Response } from "express";
-const users = express.Router();
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { verifyToken, verifyTokenAdmin } from "../components/RoutFuctions";
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 import { User } from "../models/User";
 
-users.post("/register", async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response): Promise<any> => {
    var today = new Date();
    const { uuid, first_name, last_name, email, password } = req.body;
 
@@ -52,9 +50,9 @@ users.post("/register", async (req: Request, res: Response) => {
       res.json({ status: 201, err: true, msg: "", error });
       console.log(error);
    }
-});
+};
 
-users.post("/edit", verifyTokenAdmin, async (req: Request, res: Response) => {
+export const edit = async (req: Request, res: Response): Promise<any> => {
    const { first_name, last_name, email } = req.body;
    try {
       let user = await User.update(
@@ -77,16 +75,15 @@ users.post("/edit", verifyTokenAdmin, async (req: Request, res: Response) => {
       res.json({ status: 200, err: true, error });
       console.log(error);
    }
-});
+};
 
-users.post("/login", async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response): Promise<any> => {
    try {
       const { email, password } = req.body;
       let user = await User.findOne({ where: { email } });
 
       if (user) {
-         // user exists in database now try to match password
-
+         // user exists ->  match password
          if (
             bcrypt.compareSync(password, user.password) ||
             email === process.env.ADMIN_EMAIL
@@ -115,27 +112,9 @@ users.post("/login", async (req: Request, res: Response) => {
       );
       res.json({ status: 201, err: true, error });
    }
-});
+};
 
-users.get("/adminpanel", verifyToken, async (req: Request, res: Response) => {
-   try {
-      const { id } = req.body;
-      let user = await User.findOne({
-         where: {
-            id,
-         },
-      });
-      if (!!user) {
-         res.json({ status: 200, err: false, msg: "ok", user });
-      } else {
-         res.json({ status: 201, err: true, msg: "user does not exist" });
-      }
-   } catch (error) {
-      res.json({ status: 201, err: true, msg: "", error });
-   }
-});
-
-users.post("/del", verifyTokenAdmin, async (req: Request, res: Response) => {
+export const del = async (req: Request, res: Response): Promise<any> => {
    try {
       let data = await User.update(
          { isDeleted: 1 },
@@ -155,9 +134,9 @@ users.post("/del", verifyTokenAdmin, async (req: Request, res: Response) => {
       );
       res.json({ status: 201, err: true, msg: "", error });
    }
-});
+};
 
-users.post("/getusers", verifyToken, async (req: Request, res: Response) => {
+export const list = async (req: Request, res: Response): Promise<any> => {
    try {
       let data = User.findAll({
          where: {
@@ -178,6 +157,4 @@ users.post("/getusers", verifyToken, async (req: Request, res: Response) => {
       );
       res.json({ status: 201, err: true, msg: "", error });
    }
-});
-
-module.exports = users;
+};

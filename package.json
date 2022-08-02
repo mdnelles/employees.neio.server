@@ -10,7 +10,7 @@
    "scripts": {
       "update:packages": "node wipe-dependencies.js && rm -rf node_modules && npm update --save-dev && npm update --save",
       "client-install": "npm install --prefix client",
-      "start": "node server.ts",
+      "start": "ts-node server.ts",
       "server": "nodemon server.ts --ignore client"
    },
    "adminStart": true,
@@ -25,6 +25,7 @@
    "dependencies": {
       "array-sort": "^1.0.0",
       "bcrypt": "^5.0.1",
+      "bcrypt-nodejs": "^0.0.3",
       "body-parser": "^1.20.0",
       "concurrently": "*",
       "cookie-parser": "^1.4.6",
@@ -39,6 +40,7 @@
       "helmet": "^5.1.1",
       "jquery": "^3.6.0",
       "jsonwebtoken": "^8.5.1",
+      "mongoose": "^6.5.0",
       "morgan": "^1.10.0",
       "mysql2": "^2.3.3",
       "nodemailer": "^6.7.7",

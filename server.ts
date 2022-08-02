@@ -1,5 +1,7 @@
-require("dotenv").config({ path: __dirname + "/.env" });
+require("dotenv").config({ path: . + "/.env" });
+
 import express from "express";
+import path from "node:path";
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
@@ -12,18 +14,24 @@ app.use(express.json());
 var jsonParser = bodyParser.json();
 app.use(jsonParser);
 app.use(urlencodedParser);
-
 app.use(helmet());
 
-const UserRout = require("./routes/UserRoutes");
-const EmployeeRout = require("./routes/EmployeeRoutes");
-const DepartmentRout = require("./routes/DepartmentRoutes");
-const DeptManagersRout = require("./routes/DeptManagerRoutes");
-const SalaryRout = require("./routes/SalaryRoutes");
-const TitleRout = require("./routes/TitleRoutes");
-const LogsRout = require("./routes/LogRoutes");
+import { verifyToken, verifyTokenAdmin } from "./components/RoutFuctions";
 
-app.use("/user", UserRout);
+import * as users from "./routes/UserRoutes";
+import * as employees from "./routes/EmployeeRoutes";
+import * as department from "./routes/DepartmentRoutes";
+import * as dept_manager from "./routes/DeptManagerRoutes";
+import * as salary from "./routes/SalaryRoutes";
+import * as title from "./routes/TitleRoutes";
+import * as logs from "./routes/LogRoutes";
+
+//app.use("/user", users);
+app.post("/user_register", users.register);
+app.post("/user_edit", verifyTokenAdmin, users.register);
+app.post("/user_delete", verifyTokenAdmin, users.del);
+app.post("/user_login", users.login);
+
 app.use("/logs", LogsRout);
 app.use("/employee", EmployeeRout);
 app.use("/department", DepartmentRout);
