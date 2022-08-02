@@ -1,7 +1,5 @@
-import express, { Request, Response } from "express";
-const dept_manager = express.Router();
-const Sequelize = require("sequelize");
-import cors from "cors";
+import { Request, Response } from "express";
+import Sequelize from "sequelize";
 import bcrypt from "bcrypt";
 import { db } from "../database/db";
 import { verifyToken } from "../components/RoutFuctions";
@@ -10,7 +8,7 @@ import { Salarie } from "../models/Salaries";
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 
-dept_manager.post("/add", verifyToken, async (req: Request, res: Response) => {
+export const add = async (req: Request, res: Response): Promise<any> => {
    try {
       const { uuid, first_name, last_name, email, password } = req.body;
       var today = new Date();
@@ -58,9 +56,9 @@ dept_manager.post("/add", verifyToken, async (req: Request, res: Response) => {
       res.json({ status: 201, err: true, msg: "", error });
       console.log(error);
    }
-});
+};
 
-dept_manager.post("/edit", verifyToken, async (req: Request, res: Response) => {
+export const edit = async (req: Request, res: Response): Promise<any> => {
    try {
       const { id, first_name, last_name, email } = req.body;
       let data = await DeptManagers.update(
@@ -87,42 +85,38 @@ dept_manager.post("/edit", verifyToken, async (req: Request, res: Response) => {
       res.json({ status: 201, err: true, msg: "", error });
       console.log(error);
    }
-});
+};
 
-dept_manager.post(
-   "/remove_dept_manager",
-   verifyToken,
-   async (req: Request, res: Response) => {
-      try {
-         const data = await DeptManagers.update(
-            { isDeleted: 1 },
-            { returning: true, where: { id: req.body.id } }
-         );
-         res.json({ status: 201, err: false, msg: "ok", data });
-      } catch (error) {
-         log2db(
-            500,
-            __filename.split(/[\\/]/).pop(),
-            "remove_dept_manager",
-            "catch",
-            error,
-            ip,
-            req.headers.referer,
-            getDate()
-         );
-         console.log(error);
-         res.json({ status: 201, err: true, msg: "", error });
-      }
+export const rem_manager = async (
+   req: Request,
+   res: Response
+): Promise<any> => {
+   try {
+      const data = await DeptManagers.update(
+         { isDeleted: 1 },
+         { returning: true, where: { id: req.body.id } }
+      );
+      res.json({ status: 201, err: false, msg: "ok", data });
+   } catch (error) {
+      log2db(
+         500,
+         __filename.split(/[\\/]/).pop(),
+         "remove_dept_manager",
+         "catch",
+         error,
+         ip,
+         req.headers.referer,
+         getDate()
+      );
+      console.log(error);
+      res.json({ status: 201, err: true, msg: "", error });
    }
-);
+};
 
-dept_manager.post(
-   "/get_dept_managers",
-   verifyToken,
-   async (req: Request, res: Response) => {
-      try {
-         let data = await db.sequelize.query(
-            `SELECT 
+export const list = async (req: Request, res: Response): Promise<any> => {
+   try {
+      let data = await db.sequelize.query(
+         `SELECT 
          dept_managers.from_date, 
          dept_managers.to_date, 
          departments.dept_name, 
@@ -136,35 +130,34 @@ dept_manager.post(
        LEFT JOIN employees on 
          employees.emp_no=dept_managers.emp_no 
        `,
-            {
-               type: Sequelize.QueryTypes.SELECT,
-            }
-         );
-         res.json({ status: 201, err: false, msg: "ok", data });
-      } catch (error) {
-         log2db(
-            500,
-            __filename.split(/[\\/]/).pop(),
-            "getdept_managers",
-            "catch",
-            error,
-            ip,
-            req.headers.referer,
-            getDate()
-         );
-         console.log(error);
-         res.json({ status: 201, err: true, msg: "", error });
-      }
+         {
+            type: Sequelize.QueryTypes.SELECT,
+         }
+      );
+      res.json({ status: 201, err: false, msg: "ok", data });
+   } catch (error) {
+      log2db(
+         500,
+         __filename.split(/[\\/]/).pop(),
+         "getdept_managers",
+         "catch",
+         error,
+         ip,
+         req.headers.referer,
+         getDate()
+      );
+      console.log(error);
+      res.json({ status: 201, err: true, msg: "", error });
    }
-);
+};
 
-dept_manager.post(
-   "/get_employees_by_dept",
-   verifyToken,
-   async (req: Request, res: Response) => {
-      try {
-         let data = await db.sequelize.query(
-            `SELECT 
+export const get_emp_v_depo = async (
+   req: Request,
+   res: Response
+): Promise<any> => {
+   try {
+      let data = await db.sequelize.query(
+         `SELECT 
          dept_managers.from_date, 
          dept_managers.to_date, 
          departments.dept_name, 
@@ -177,72 +170,65 @@ dept_manager.post(
        LEFT JOIN employees on 
          employees.emp_no=dept_managers.emp_no 
        `,
-            {
-               replacements: {
-                  dept_no: req.body.dept_no,
-               },
-               type: Sequelize.QueryTypes.SELECT,
-            }
-         );
-         res.json({ status: 201, err: false, msg: "ok", data });
-      } catch (error) {
-         log2db(
-            500,
-            __filename.split(/[\\/]/).pop(),
-            "getemployees",
-            "catch",
-            error,
-            ip,
-            req.headers.referer,
-            getDate()
-         );
-         console.log(error);
-         res.json({ status: 201, err: true, msg: "", error });
-      }
+         {
+            replacements: {
+               dept_no: req.body.dept_no,
+            },
+            type: Sequelize.QueryTypes.SELECT,
+         }
+      );
+      res.json({ status: 201, err: false, msg: "ok", data });
+   } catch (error) {
+      log2db(
+         500,
+         __filename.split(/[\\/]/).pop(),
+         "getemployees",
+         "catch",
+         error,
+         ip,
+         req.headers.referer,
+         getDate()
+      );
+      console.log(error);
+      res.json({ status: 201, err: true, msg: "", error });
    }
-);
+};
 
-dept_manager.post(
-   "/get_details",
-   verifyToken,
-   async (req: Request, res: Response) => {
-      try {
-         const { id } = req.body;
-         let data1 = await Salarie.findAll({
-            where: { emp_no: id },
-         });
+export const details = async (req: Request, res: Response): Promise<any> => {
+   try {
+      const { id } = req.body;
+      let data1 = await Salarie.findAll({
+         where: { emp_no: id },
+      });
 
-         let data2 = await db.sequelize.query(
-            `SELECT * FROM dept_emps  LEFT JOIN dept_managers ON  dept_emps.dept_no=dept_managers.dept_no WHERE dept_emps.emp_no= :emp_no`,
-            {
-               replacements: {
-                  emp_no: id,
-               },
-               type: Sequelize.QueryTypes.SELECT,
-            }
-         );
+      let data2 = await db.sequelize.query(
+         `SELECT * FROM dept_emps  LEFT JOIN dept_managers ON  dept_emps.dept_no=dept_managers.dept_no WHERE dept_emps.emp_no= :emp_no`,
+         {
+            replacements: {
+               emp_no: id,
+            },
+            type: Sequelize.QueryTypes.SELECT,
+         }
+      );
 
-         let obj = {
-            dept_managers: data2,
-            salaries: data1,
-         };
+      let obj = {
+         dept_managers: data2,
+         salaries: data1,
+      };
 
-         res.json({ status: 201, err: false, msg: "ok", data: obj });
-      } catch (error) {
-         log2db(
-            500,
-            __filename.split(/[\\/]/).pop(),
-            "get_details",
-            "catch",
-            error,
-            ip,
-            req.headers.referer,
-            getDate()
-         );
-         console.log(error);
-         res.json({ status: 201, err: true, msg: "", error });
-      }
+      res.json({ status: 201, err: false, msg: "ok", data: obj });
+   } catch (error) {
+      log2db(
+         500,
+         __filename.split(/[\\/]/).pop(),
+         "get_details",
+         "catch",
+         error,
+         ip,
+         req.headers.referer,
+         getDate()
+      );
+      console.log(error);
+      res.json({ status: 201, err: true, msg: "", error });
    }
-);
-
-module.exports = dept_manager;
+};

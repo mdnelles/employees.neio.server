@@ -1,20 +1,15 @@
-import express, { Request, Response } from "express";
-const salary = express.Router();
-const Sequelize = require("sequelize");
+import { Request, Response } from "express";
+import Sequelize from "sequelize";
 import { db } from "../database/db";
-import { verifyToken } from "../components/RoutFuctions";
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 
-salary.post(
-   "/get_salaries",
-   verifyToken,
-   async (req: Request, res: Response) => {
-      try {
-         let low = req.body.salaryRange || 50000;
-         let high = low + 2499;
-         const data = await db.sequelize.query(
-            ` SELECT s.emp_no, 
+export const list = async (req: Request, res: Response): Promise<any> => {
+   try {
+      let low = req.body.salaryRange || 50000;
+      let high = low + 2499;
+      const data = await db.sequelize.query(
+         ` SELECT s.emp_no, 
                     ANY_VALUE(salary) as any_salary,
                     ANY_VALUE(from_date) as any_start,
                     ANY_VALUE(to_date) as any_finish,
@@ -27,31 +22,28 @@ salary.post(
                     AND s.salary < :high
                     GROUP BY s.emp_no
                LIMIT 2000`,
-            {
-               replacements: {
-                  low: low,
-                  high: high,
-               },
-               type: Sequelize.QueryTypes.SELECT,
-            }
-         );
+         {
+            replacements: {
+               low: low,
+               high: high,
+            },
+            type: Sequelize.QueryTypes.SELECT,
+         }
+      );
 
-         res.json({ status: 201, err: false, msg: "ok", data });
-      } catch (error) {
-         log2db(
-            500,
-            __filename.split(/[\\/]/).pop(),
-            "getsalarys",
-            "catch",
-            error,
-            ip,
-            req.headers.referer,
-            getDate()
-         );
-         console.log(error);
-         res.json({ status: 201, err: true, msg: "", error });
-      }
+      res.json({ status: 201, err: false, msg: "ok", data });
+   } catch (error) {
+      log2db(
+         500,
+         __filename.split(/[\\/]/).pop(),
+         "getsalarys",
+         "catch",
+         error,
+         ip,
+         req.headers.referer,
+         getDate()
+      );
+      console.log(error);
+      res.json({ status: 201, err: true, msg: "", error });
    }
-);
-
-module.exports = salary;
+};

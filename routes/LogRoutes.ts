@@ -1,13 +1,10 @@
-import express, { Request, Response } from "express";
-const logs = express.Router();
-const Sequelize = require("sequelize");
+import { Request, Response } from "express";
+import Sequelize from "sequelize";
 import { db } from "../database/db";
-import { verifyToken } from "../components/RoutFuctions";
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
-const User = require("../models/User");
 
-logs.post("/get_logs", verifyToken, async (req: Request, res: Response) => {
+export const list = async (req: Request, res: Response): Promise<any> => {
    try {
       const { page, code = "500", perPage = 20 } = req.body;
 
@@ -41,9 +38,9 @@ logs.post("/get_logs", verifyToken, async (req: Request, res: Response) => {
       console.log(error);
       res.json({ status: 201, err: true, msg: "", error });
    }
-});
+};
 
-logs.post("/get_logcount", verifyToken, async (req: Request, res: Response) => {
+export const get_count = async (req: Request, res: Response): Promise<any> => {
    try {
       const { code = 500 } = req.body;
 
@@ -76,6 +73,4 @@ logs.post("/get_logcount", verifyToken, async (req: Request, res: Response) => {
       console.log(error);
       res.json({ status: 201, err: true, msg: "", error });
    }
-});
-
-module.exports = logs;
+};

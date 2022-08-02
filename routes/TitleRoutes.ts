@@ -1,41 +1,35 @@
-import express, { Request, Response } from "express";
-const title = express.Router();
-const Sequelize = require("sequelize");
+import { Request, Response } from "express";
+import Sequelize from "sequelize";
 import { db } from "../database/db";
-import { verifyToken } from "../components/RoutFuctions";
 import { Title } from "../models/Titles";
 import { Salarie } from "../models/Salaries";
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 
-title.post(
-   "/remove_title",
-   verifyToken,
-   async (req: Request, res: Response) => {
-      try {
-         let data = await Title.update(
-            { isDeleted: 1 },
-            { returning: true, where: { id: req.body.id } }
-         );
-         res.json({ status: 201, err: false, msg: "ok", data });
-      } catch (error) {
-         log2db(
-            500,
-            __filename.split(/[\\/]/).pop(),
-            "remove_title",
-            "catch",
-            error,
-            ip,
-            req.headers.referer,
-            getDate()
-         );
-         console.log(error);
-         res.json({ status: 201, err: true, msg: "", error });
-      }
+export const remove = async (req: Request, res: Response): Promise<any> => {
+   try {
+      let data = await Title.update(
+         { isDeleted: 1 },
+         { returning: true, where: { id: req.body.id } }
+      );
+      res.json({ status: 201, err: false, msg: "ok", data });
+   } catch (error) {
+      log2db(
+         500,
+         __filename.split(/[\\/]/).pop(),
+         "remove_title",
+         "catch",
+         error,
+         ip,
+         req.headers.referer,
+         getDate()
+      );
+      console.log(error);
+      res.json({ status: 201, err: true, msg: "", error });
    }
-);
+};
 
-title.post("/get_titles", verifyToken, async (req: Request, res: Response) => {
+export const list = async (req: Request, res: Response): Promise<any> => {
    try {
       let data = await db.sequelize.query(
          `select titles.title from employees.titles group by titles.title`,
@@ -58,9 +52,9 @@ title.post("/get_titles", verifyToken, async (req: Request, res: Response) => {
       console.log(error);
       res.json({ status: 201, err: true, msg: "", error });
    }
-});
+};
 
-title.post("/get_details", verifyToken, async (req: Request, res: Response) => {
+export const details = async (req: Request, res: Response): Promise<any> => {
    const { id } = req.body;
    try {
       let data1 = Salarie.findAll({
@@ -96,6 +90,4 @@ title.post("/get_details", verifyToken, async (req: Request, res: Response) => {
       console.log(error);
       res.json({ status: 201, err: true, msg: "", error });
    }
-});
-
-module.exports = title;
+};
