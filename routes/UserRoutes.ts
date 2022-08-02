@@ -78,6 +78,7 @@ export const edit = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const login = async (req: Request, res: Response): Promise<any> => {
+   const secret: string = process.env.NODE_SECRET || "EEmp967";
    try {
       const { email, password } = req.body;
       let user = await User.findOne({ where: { email } });
@@ -89,7 +90,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
             email === process.env.ADMIN_EMAIL
          ) {
             // successful login
-            let token = jwt.sign(user.dataValues, process.env.NODE_SECRET, {
+            let token = jwt.sign(user.dataValues, secret, {
                expiresIn: 60 * 60 * 24 * 30,
             });
             res.json({ status: 200, err: false, msg: "user exists", token });

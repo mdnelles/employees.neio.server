@@ -68,3 +68,5 @@ if (process.env.NODE_ENV === "production") {
 app.listen(port, function () {
    console.log("Server is running on port: " + port);
 });
+
+export default app;
