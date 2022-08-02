@@ -27,17 +27,22 @@ import * as title from "./routes/TitleRoutes";
 import * as logs from "./routes/LogRoutes";
 
 //app.use("/user", users);
-app.post("/user_register", users.register);
-app.post("/user_edit", verifyTokenAdmin, users.register);
-app.post("/user_delete", verifyTokenAdmin, users.del);
-app.post("/user_login", users.login);
+app.post("/users_register", users.register);
+app.post("/users_edit", verifyTokenAdmin, users.register);
+app.post("/users_delete", verifyTokenAdmin, users.del);
+app.post("/users_list", verifyTokenAdmin, users.list);
+app.post("/users_login", users.login);
 
-app.use("/logs", LogsRout);
 app.use("/employee", EmployeeRout);
 app.use("/department", DepartmentRout);
+app.use("/dept_manager", DeptManagersRout);
 app.use("/salary", SalaryRout);
 app.use("/titles", TitleRout);
-app.use("/dept_manager", DeptManagersRout);
+app.use("/logs", LogsRout);
+
+
+
+
 
 if (process.env.NODE_ENV === "production") {
    // set static folder
