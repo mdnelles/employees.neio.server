@@ -23,6 +23,3 @@ types
 |_express
 |_ index.d.ts <declare module "express";>
 
-## Authors
-
--  [@mdnelles](https://www.github.com/mdnelles)
