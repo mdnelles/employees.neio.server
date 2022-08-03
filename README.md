@@ -18,10 +18,15 @@ The `up` flag stands for Create and starts containers and `-d` is the detached m
 ## Types
 
 In order to swap `import` instead of `require` types folder had to be created.
-was `const express = require("express");` is `import express from "express";`
-types
-|_express
-|_ index.d.ts <declare module "express";>
+was `const express = require("express");` is
+`import express from "express";`
+
+>
+
+    types
+        |_express
+            |_ index.d.ts
+                declare module "express";
 
 ## Authors
 
