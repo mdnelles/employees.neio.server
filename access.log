@@ -1,5 +1,0 @@
-::1 - - [22/Mar/2020:20:26:11 +0000] "POST /user/login HTTP/1.1" 200 489
-::1 - - [22/Mar/2020:20:26:12 +0000] "POST /user/islogged HTTP/1.1" 200 4
-::1 - - [22/Mar/2020:20:26:13 +0000] "POST /search/get_titles HTTP/1.1" 200 9623
-::1 - - [22/Mar/2020:20:26:13 +0000] "POST /user/getusers HTTP/1.1" 200 785
-::1 - - [22/Mar/2020:20:27:24 +0000] "GET / HTTP/1.1" 404 139

@@ -1,10 +1,10 @@
 import express from "express";
+
 //const express = require("express");
-const compression = require("compression");
-const session = require("express-session");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const helmet = require("helmet");
+import compression from "compression";
+import bodyParser from "body-parser";
+import cors from "cors";
+import helmet from "helmet";
 const env = require("dotenv").config().parsed;
 
 import { verifyToken, verifyTokenAdmin } from "./components/RoutFuctions";
@@ -16,6 +16,7 @@ import * as dept_manager from "./routes/DeptManagerRoutes";
 import * as salary from "./routes/SalaryRoutes";
 import * as title from "./routes/TitleRoutes";
 import * as logs from "./routes/LogRoutes";
+import * as basic from "./routes/Basic";
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const app = express();
@@ -72,6 +73,8 @@ app.post("/title_details", verifyTokenAdmin, title.details);
 
 app.post("/logs_list", verifyToken, logs.list);
 app.post("/logs_get_count", verifyToken, logs.get_count);
+
+app.post("/basic_api", verifyToken, basic.api);
 
 if (env.NODE_ENV === "production") {
    // set static folder

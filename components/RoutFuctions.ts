@@ -1,10 +1,8 @@
 //const express = require("express");
-
 const jwt = require("jsonwebtoken");
 const env = require("dotenv").config().parsed;
-import { Request, Response, NextFunction } from "express";
 
-const tokenTest = (token: string, res: Response, next: any) => {
+const tokenTest = (token: string, res: any, next: any) => {
    jwt.verify(token, env.NODE_SECRET, (error: any) => {
       if (error) {
          console.log("bad token: " + token);
@@ -15,7 +13,7 @@ const tokenTest = (token: string, res: Response, next: any) => {
    });
 };
 
-const tokenTestAdmin = async (token: string, res: Response, next: any) => {
+const tokenTestAdmin = async (token: string, res: any, next: any) => {
    jwt.verify(token, env.NODE_SECRET, (error: any, decoded: any) => {
       if (error || decoded.email !== env.NODE_ADMIN_EMAIL) {
          res.json({ status: 201, err: true, msg: "bad admin token" });
@@ -25,11 +23,7 @@ const tokenTestAdmin = async (token: string, res: Response, next: any) => {
    });
 };
 
-export const verifyToken = (
-   req: Request,
-   res: Response,
-   next: NextFunction
-) => {
+export const verifyToken = (req: any | null, res: any, next: any) => {
    try {
       const token = req.body.token || req.headers.token || null;
 
@@ -40,11 +34,7 @@ export const verifyToken = (
    }
 };
 
-export const verifyTokenAdmin = (
-   req: Request,
-   res: Response,
-   next: NextFunction
-) => {
+export const verifyTokenAdmin = (req: any, res: any, next: any) => {
    try {
       const token: any = req.body.token || req.headers.token || null;
 

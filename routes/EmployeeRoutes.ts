@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import Sequelize from "sequelize";
 import bcrypt from "bcrypt";
 import { db } from "../database/db";
@@ -7,7 +6,7 @@ import { Salarie } from "../models/Salaries";
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 
-export const add = async (req: Request, res: Response): Promise<any> => {
+export const add = async (req: any, res: any): Promise<any> => {
    try {
       const { uuid, first_name, last_name, email, password } = req.body;
       var today = new Date();
@@ -52,7 +51,7 @@ export const add = async (req: Request, res: Response): Promise<any> => {
    }
 };
 
-export const edit = async (req: Request, res: Response): Promise<any> => {
+export const edit = async (req: any, res: any): Promise<any> => {
    try {
       const { id, first_name, last_name, email } = req.body;
       await Employees.update(
@@ -81,7 +80,7 @@ export const edit = async (req: Request, res: Response): Promise<any> => {
    }
 };
 
-export const remove = async (req: Request, res: Response): Promise<any> => {
+export const remove = async (req: any, res: any): Promise<any> => {
    try {
       const { id } = req.body;
       await Employees.update(
@@ -104,7 +103,7 @@ export const remove = async (req: Request, res: Response): Promise<any> => {
    }
 };
 
-export const get = async (req: Request, res: Response): Promise<any> => {
+export const get = async (req: any, res: any): Promise<any> => {
    try {
       const data = await Employees.findAll({ limit: 10000 });
       res.json({ status: 200, err: false, msg: "ok", data });
@@ -123,7 +122,7 @@ export const get = async (req: Request, res: Response): Promise<any> => {
    }
 };
 
-export const details = async (req: Request, res: Response): Promise<any> => {
+export const details = async (req: any, res: any): Promise<any> => {
    try {
       const data1 = await Salarie.findAll({
          where: { emp_no: req.body.id },

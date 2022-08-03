@@ -7,13 +7,15 @@
       "sourceMap": true,
       "outDir": "./dist",
       "moduleResolution": "node",
+      "allowJs": true,
+      "checkJs": false,
       "removeComments": true,
       "noImplicitAny": true,
-      "strictNullChecks": true,
-      "strictFunctionTypes": true,
+      "strictNullChecks": false,
+      "strictFunctionTypes": false,
       "noImplicitThis": true,
       "noUnusedLocals": true,
-      "noUnusedParameters": true,
+      "noUnusedParameters": false,
       "noImplicitReturns": true,
       "noFallthroughCasesInSwitch": true,
       "allowSyntheticDefaultImports": true,
@@ -22,8 +24,11 @@
       "experimentalDecorators": true,
       "resolveJsonModule": true,
       "baseUrl": ".",
-      "typeRoots": ["./src/types", "./types", "./node_modules/@types/"]
+      "typeRoots": ["./types", "./src/types", "./node_modules/@types"],
+      "paths": {
+         "*": ["src/@types/*"]
+      }
    },
-   "exclude": ["node_modules"],
+   "exclude": ["node_modules", "types"],
    "include": ["./src/**/*.ts"]
 }
