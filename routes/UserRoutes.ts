@@ -1,15 +1,12 @@
-require("dotenv").config({ path: __dirname + "/.env" });
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 const env = require("dotenv").config().parsed;
-
-import { Request, Response } from "express";
 
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 import { User } from "../models/User";
 
-export const register = async (req: Request, res: Response): Promise<any> => {
+export const register = async (req: any, res: any): Promise<any> => {
    var today = new Date();
    const { uuid, first_name, last_name, email, password } = req.body;
 
@@ -55,7 +52,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
    }
 };
 
-export const edit = async (req: Request, res: Response): Promise<any> => {
+export const edit = async (req: any, res: any): Promise<any> => {
    const { first_name, last_name, email } = req.body;
    try {
       let user = await User.update(
@@ -80,7 +77,7 @@ export const edit = async (req: Request, res: Response): Promise<any> => {
    }
 };
 
-export const login = async (req: Request, res: Response): Promise<any> => {
+export const login = async (req: any, res: any): Promise<any> => {
    const secret: string = env.NODE_SECRET || "EEmp967";
    try {
       const { email, password } = req.body;
@@ -118,7 +115,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
    }
 };
 
-export const del = async (req: Request, res: Response): Promise<any> => {
+export const del = async (req: any, res: any): Promise<any> => {
    try {
       let data = await User.update(
          { isDeleted: 1 },
@@ -140,7 +137,7 @@ export const del = async (req: Request, res: Response): Promise<any> => {
    }
 };
 
-export const list = async (req: Request, res: Response): Promise<any> => {
+export const list = async (req: any, res: any): Promise<any> => {
    try {
       let data = User.findAll({
          where: {

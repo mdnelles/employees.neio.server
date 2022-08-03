@@ -3,7 +3,7 @@ import { Sequelize } from "sequelize";
 const env = require("dotenv").config().parsed;
 
 export const db: any = {};
-const sequelize: Sequelize = new Sequelize(
+const sequelize = new Sequelize(
    env.NODE_DB_NAME,
    env.NODE_DB_USER,
    env.NODE_DB_PASS,

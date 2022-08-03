@@ -1,10 +1,9 @@
-import { Request, Response } from "express";
 import Sequelize from "sequelize";
 import { db } from "../database/db";
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 
-export const list = async (req: Request, res: Response): Promise<any> => {
+export const list = async (req: any, res: any): Promise<any> => {
    try {
       let low = req.body.salaryRange || 50000;
       let high = low + 2499;

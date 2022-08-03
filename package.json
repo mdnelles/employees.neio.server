@@ -1,12 +1,12 @@
 {
    "name": "nodejs-server-employees",
-   "version": "1.0.0",
+   "version": "0.1.08",
    "description": "Server side application for employees app",
    "engines": {
       "node": "^18.5.0",
       "npm": "^8.12.1"
    },
-   "main": "app.ts",
+   "main": "./app.ts",
    "scripts": {
       "update:packages": "node wipe-dependencies.js && rm -rf node_modules && npm update --save-dev && npm update --save",
       "client-install": "npm install --prefix client",
