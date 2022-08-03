@@ -1,21 +1,13 @@
-require("dotenv").config({ path: __dirname + +"/.env" });
-
 import express from "express";
+//const express = require("express");
+const compression = require("compression");
+const session = require("express-session");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const helmet = require("helmet");
+const env = require("dotenv").config().parsed;
+
 import { verifyToken, verifyTokenAdmin } from "./components/RoutFuctions";
-
-import bodyParser from "body-parser";
-import cors from "cors";
-import helmet from "helmet";
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
-const app = express();
-const jsonParser = bodyParser.json();
-const port = process.env.NODE_PORT || 5010;
-
-app.use(cors());
-app.use(express.json());
-app.use(jsonParser);
-app.use(urlencodedParser);
-app.use(helmet());
 
 import * as users from "./routes/UserRoutes";
 import * as employees from "./routes/EmployeeRoutes";
@@ -24,6 +16,27 @@ import * as dept_manager from "./routes/DeptManagerRoutes";
 import * as salary from "./routes/SalaryRoutes";
 import * as title from "./routes/TitleRoutes";
 import * as logs from "./routes/LogRoutes";
+
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
+const app = express();
+const jsonParser = bodyParser.json();
+const port = env.NODE_PORT || 5010;
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+/*app.use(
+   session({
+      resave: false,
+      saveUninitialized: true,
+      secret: env.NODE_SECRET,
+   })
+);*/
+app.use(compression());
+app.use(express.json());
+app.use(jsonParser);
+app.use(urlencodedParser);
+app.use(helmet());
 
 //app.use("/user", users);
 app.post("/users_register", users.register);
@@ -60,7 +73,7 @@ app.post("/title_details", verifyTokenAdmin, title.details);
 app.post("/logs_list", verifyToken, logs.list);
 app.post("/logs_get_count", verifyToken, logs.get_count);
 
-if (process.env.NODE_ENV === "production") {
+if (env.NODE_ENV === "production") {
    // set static folder
    app.use(express.static("client/build"));
 }
@@ -68,3 +81,5 @@ if (process.env.NODE_ENV === "production") {
 app.listen(port, function () {
    console.log("Server is running on port: " + port);
 });
+
+export default app;

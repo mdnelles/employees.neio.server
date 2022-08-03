@@ -1,12 +1,14 @@
-require("dotenv").config({ path: __dirname + "/.env" });
+//require("dotenv").config({ path: __dirname + "/.env" });
 import { Sequelize } from "sequelize";
+const env = require("dotenv").config().parsed;
+
 export const db: any = {};
-const sequelize = new Sequelize(
-   process.env.NODE_DB_NAME,
-   process.env.NODE_DB_USER,
-   process.env.NODE_DB_PASS,
+const sequelize: Sequelize = new Sequelize(
+   env.NODE_DB_NAME,
+   env.NODE_DB_USER,
+   env.NODE_DB_PASS,
    {
-      host: process.env.NODE_DB_HOST,
+      host: env.NODE_DB_HOST,
       dialect: "mysql",
       logging: console.log,
 
