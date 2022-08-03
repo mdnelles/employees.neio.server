@@ -1,11 +1,11 @@
-import jwt from "jsonwebtoken";
-import log2db from "./Logger";
-import { Request, Response, NextFunction } from "express";
-import { ip, getDate } from "./Global";
-require("dotenv").config({ path: __dirname + "/.env" });
+//const express = require("express");
 
-const tokenTest = (token: string, res: Response, next: NextFunction) => {
-   jwt.verify(token, process.env.NODE_SECRET, (error: any) => {
+const jwt = require("jsonwebtoken");
+const env = require("dotenv").config().parsed;
+import { Request, Response, NextFunction } from "express";
+
+const tokenTest = (token: string, res: Response, next: any) => {
+   jwt.verify(token, env.NODE_SECRET, (error: any) => {
       if (error) {
          console.log("bad token: " + token);
          res.json({ status: 201, err: true, msg: "bad token", error });
@@ -15,17 +15,11 @@ const tokenTest = (token: string, res: Response, next: NextFunction) => {
    });
 };
 
-const tokenTestAdmin = async (
-   token: string,
-   res: Response,
-   next: NextFunction
-) => {
-   jwt.verify(token, process.env.NODE_SECRET, (error: any, decoded: any) => {
-      if (error || decoded.email !== process.env.NODE_ADMIN_EMAIL) {
-         console.log("------bad admin token: ");
+const tokenTestAdmin = async (token: string, res: Response, next: any) => {
+   jwt.verify(token, env.NODE_SECRET, (error: any, decoded: any) => {
+      if (error || decoded.email !== env.NODE_ADMIN_EMAIL) {
          res.json({ status: 201, err: true, msg: "bad admin token" });
       } else {
-         console.log("----good admin token");
          next(); // Next middleware
       }
    });

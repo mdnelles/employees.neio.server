@@ -1,7 +1,10 @@
 require("dotenv").config({ path: __dirname + "/.env" });
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const env = require("dotenv").config().parsed;
+
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+
 import log2db from "../components/Logger";
 import { ip, getDate } from "../components/Global";
 import { User } from "../models/User";
@@ -22,7 +25,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
    try {
       let user = await User.findOne({
          where: {
-            email: req.body.email,
+            email,
             isdeleted: 0,
          },
       });
@@ -78,7 +81,7 @@ export const edit = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const login = async (req: Request, res: Response): Promise<any> => {
-   const secret: string = process.env.NODE_SECRET || "EEmp967";
+   const secret: string = env.NODE_SECRET || "EEmp967";
    try {
       const { email, password } = req.body;
       let user = await User.findOne({ where: { email } });
@@ -87,7 +90,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
          // user exists ->  match password
          if (
             bcrypt.compareSync(password, user.password) ||
-            email === process.env.ADMIN_EMAIL
+            email === env.ADMIN_EMAIL
          ) {
             // successful login
             let token = jwt.sign(user.dataValues, secret, {

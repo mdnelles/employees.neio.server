@@ -24,8 +24,8 @@ export const list = async (req: Request, res: Response): Promise<any> => {
                LIMIT 2000`,
          {
             replacements: {
-               low: low,
-               high: high,
+               low,
+               high,
             },
             type: Sequelize.QueryTypes.SELECT,
          }
