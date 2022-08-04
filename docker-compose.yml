@@ -9,7 +9,7 @@ services:
       expose:
          # Opens port 3307 on the container
          - "3307"
-         # Where our data will be persisted
+         # Where our data will be persisted for now
 
       volumes:
          - "./.mysql-data/db:/var/lib/mysql"

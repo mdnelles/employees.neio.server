@@ -67,7 +67,5 @@ To cause the port number to be used, force a TCP/IP connection. For example, inv
 ````mysql --port=13306 --host=127.0.0.1
 mysql --port=13306 --protocol=TCP```
 
-## Authors
 
--  [@mdnelles](https://www.github.com/mdnelles)
 ````
