@@ -1,0 +1,16 @@
+version: "3"
+services:
+   mysql:
+      image: mysql:8.0.29
+      env_file: ./.env
+      container_name: "mysq8029"
+      environment:
+         MYSQL_DATABASE: "mysqldb"
+         MYSQL_USER: $NODE_DB_USER
+         MYSQL_PASSWORD: $NODE_DB_PASS
+         MYSQL_ROOT_PASSWORD: $NODE_DB_PASS
+      ports:
+         # HOST:CONTAINER
+         - "$NODE_MYSQL_PORT_HOST:$NODE_MYSQL_PORT_CONTAINER"
+      volumes:
+         - /var/lib/mysql

@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+   mysqldb:
+      image: mysql:8.0.29
+      restart: unless-stopped
+      env_file: ./.env
+      environment:
+         - MYSQL_ROOT_PASSWORD=$NODE_DB_PASS
+         - MYSQL_DATABASE=$NODE_DB_NAME
+      ports:
+         # HOST:CONTAINER
+         - "$NODE_MYSQL_PORT_HOST:$NODE_MYSQL_PORT_CONTAINER"
+      volumes:
+         - /var/lib/mysql
+   web:
+      build: .
+      command: npm run start
+      volumes:
+         - .:/app/
+         - /app/node_modules
+      ports:
+         - "5010:5010"
+      environment:
+         - DB_HOST=$NODE_DB_HOST
+         - DB_USER=$NODE_DB_USER
+         - DB_PASSWORD=$NODE_DB_PASS
+         - DB_NAME=$NODE_DB_NAME
+         - DB_PORT=$NODE_MYSQL_PORT_CONTAINER
+         - DATABASE_URL=$NODE_DB_HOST
+      depends_on:
+         - mysqldb

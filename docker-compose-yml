@@ -62,3 +62,42 @@ volumes:
       driver: local
    backendredis:
       driver: local
+
+##############
+
+version: "3.8"
+services:
+   mysqldb:
+      image: mysql:8.0.29
+      restart: unless-stopped
+      env_file: ./.env
+      environment:
+         - MYSQL_ROOT_PASSWORD=$NODE_DB_PASS
+         - MYSQL_DATABASE=$NODE_DB_NAME
+      ports:
+         # HOST:CONTAINER
+         - "$NODE_MYSQL_PORT_HOST:$NODE_MYSQL_PORT_CONTAINER"
+      volumes:
+         - db:/var/lib/mysql
+   app:
+      depends_on:
+         - mysqldb
+      build:
+         context: ./
+         target: development-build-stage
+         dockerfile: Dockerfile
+      restart: unless-stopped
+      env_file: ./.env
+      ports:
+         - $NODE_PORT:$NODE_PORT
+      environment:
+         - DB_HOST=mysql
+         - DB_USER=$NODE_DB_USER
+         - DB_PASSWORD=$NODE_DB_PASS
+         - DB_NAME=$NODE_DB_NAME
+         - DB_PORT=$NODE_MYSQL_PORT_CONTAINER
+      stdin_open: true
+      tty: true
+volumes:
+   db:
+
