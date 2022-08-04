@@ -8,6 +8,7 @@ const sequelize = new Sequelize(
    env.NODE_DB_USER,
    env.NODE_DB_PASS,
    {
+      port: env.NODE_DB_PORT,
       host: env.NODE_DB_HOST,
       dialect: "mysql",
       logging: console.log,

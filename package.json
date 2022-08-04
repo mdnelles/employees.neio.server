@@ -6,12 +6,12 @@
       "node": "^18.5.0",
       "npm": "^8.12.1"
    },
-   "main": "./app.ts",
+   "main": "./src/server.ts",
    "scripts": {
       "update:packages": "node wipe-dependencies.js && rm -rf node_modules && npm update --save-dev && npm update --save",
       "client-install": "npm install --prefix client",
-      "start": "ts-node ./app.ts --ignore client",
-      "server": "nodemon ./app.ts --ignore client"
+      "start": "ts-node ./src/server.ts --ignore client",
+      "server": "nodemon ./src/server.ts --ignore client"
    },
    "adminStart": true,
    "keywords": [
@@ -41,10 +41,7 @@
       "helmet": "^5.1.1",
       "jquery": "^3.6.0",
       "jsonwebtoken": "^8.5.1",
-      "mongoose": "^6.5.0",
-      "morgan": "^1.10.0",
       "mysql2": "^2.3.3",
-      "nodemailer": "^6.7.7",
       "path": "^0.12.7",
       "sequelize": "^6.21.3",
       "serve": "^14.0.1",

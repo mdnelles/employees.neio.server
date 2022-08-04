@@ -29,6 +29,17 @@ Was `const express = require("express");` is
             |_ index.d.ts
                 declare module "express";
 
+## Docker
+
+restart: `killall Docker && open /Applications/Docker.app`
+
+https://hub.docker.com/ > search `mysql` find the command as below:
+
+`docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag`
+
+(remove tag add port numbers)
+
+`docker run -d -p 3306:3306 --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret`
 
 ## The web service
 
@@ -49,5 +60,3 @@ The first directive in the web service is to build the image based on our Docker
 ## Authors
 
 -  [@mdnelles](https://www.github.com/mdnelles)
-=======
-
