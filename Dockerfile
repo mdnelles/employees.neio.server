@@ -13,11 +13,7 @@ COPY ["package.json", "package-lock.json*", "./"]
 
 RUN npm install
 
-EXPOSE 5010
-
-EXPOSE 3306
-
-EXPOSE 3316
+EXPOSE 5010 3306 3307
 
 COPY . .
 
