@@ -17,6 +17,8 @@ EXPOSE 5010
 
 EXPOSE 3306
 
+EXPOSE 3316
+
 COPY . .
 
 CMD ["npm", "run", "start"]
