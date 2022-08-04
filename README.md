@@ -57,6 +57,15 @@ The first directive in the web service is to build the image based on our Docker
 
 -  ports: - This will publish the container's port, in this case 5010, to the host as port 5010.
 
-## Authors
+## testing
 
--  [@mdnelles](https://www.github.com/mdnelles)
+Example: To test if mysql is running in the container after it is spun up:
+`mysql -u USERNAME -p --host=127.0.0.1 --port=3306` or `mysql -u USERNAME -p --host=localhost --port=3306`
+
+To cause the port number to be used, force a TCP/IP connection. For example, invoke the program in either of these ways:
+
+````mysql --port=13306 --host=127.0.0.1
+mysql --port=13306 --protocol=TCP```
+
+
+````

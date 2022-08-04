@@ -3,19 +3,35 @@ services:
    mysqldb:
       image: mysql:8.0
       env_file: ./.env
+      ports:
+         # <Port exposed> : < MySQL Port running inside container>
+         - "3307:3306"
+      expose:
+         # Opens port 3307 on the container
+         - "3307"
+         # Where our data will be persisted for now
+
+      volumes:
+         - "./.mysql-data/db:/var/lib/mysql"
       environment:
          - MYSQL_DATABASE=$NODE_DB_NAME
-         - MYSQL_USER=$NODE_DB_USER_ROOT
-         - MYSQL_PASSWORD=$NODE_DB_PASS_ROOT
+         - MYSQL_USER=$NODE_DB_USER
+         - MYSQL_PASSWORD=$NODE_DB_PASS
          - MYSQL_ROOT_PASSWORD=$NODE_DB_PASS_ROOT
    web:
       build: .
       command: npm run start
       volumes:
-         - .:/app/
-         - /app/node_modules
+         - .:/src/app
+         - /src/app/node_modules
+         # /path-to-node_modules/app/node_modules
       ports:
          - "5010:5010"
+      environment:
+         - MYSQL_DATABASE=$NODE_DB_NAME
+         - MYSQL_USER=$NODE_DB_USER
+         - MYSQL_PASSWORD=$NODE_DB_PASS
+         - MYSQL_ROOT_PASSWORD=$NODE_DB_PASS_ROOT
 
       depends_on:
          - mysqldb
