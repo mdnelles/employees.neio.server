@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1
-# recommend using docker/dockerfile:1, which always points to the latest release of the version 1 syntax
 
 FROM node:18
 
