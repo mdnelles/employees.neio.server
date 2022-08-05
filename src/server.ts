@@ -75,6 +75,8 @@ app.post("/logs_list", verifyToken, logs.list);
 app.post("/logs_get_count", verifyToken, logs.get_count);
 
 app.post("/basic_api", verifyToken, basic.api);
+app.post("/schemas", verifyToken, basic.schemas);
+app.post("/tables", verifyToken, basic.tables);
 
 if (env.NODE_ENV === "production") {
    // set static folder

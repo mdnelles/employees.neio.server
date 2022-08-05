@@ -10,9 +10,9 @@ This is a back end application that comminicates directly with the database for 
 -  Tokenized session with JWT
 -  MySql DataBase
 
-## Notes:
+## Dockerize
 
-`docker-compose --file mysql/docker-compose.yml up -d`
+`docker compose -f docker-combined.yml up -d`
 The `up` flag stands for Create and starts containers and `-d` is the detached mode which lets you run docker ps to check the status of the container:
 
 ## Types
@@ -29,7 +29,7 @@ Was `const express = require("express");` is
             |_ index.d.ts
                 declare module "express";
 
-## Docker
+## Docker Additional Notes
 
 restart: `killall Docker && open /Applications/Docker.app`
 
@@ -40,6 +40,9 @@ https://hub.docker.com/ > search `mysql` find the command as below:
 (remove tag add port numbers)
 
 `docker run -d -p 3306:3306 --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret`
+
+Make sure your mysql server can allow connections from different hosts
+In `my.cnf` if you use bind-address = 0.0.0.0 your MySQL server will listen for connections on all network interfaces. That means your MySQL server could be reached from the Internet ; make sure to setup firewall rules accordingly.
 
 ## The web service
 
@@ -56,6 +59,11 @@ The first directive in the web service is to build the image based on our Docker
 -  environment: - The application itself expects the environment variable `DATABASE_URL` to run. This is set in db.js.
 
 -  ports: - This will publish the container's port, in this case 5010, to the host as port 5010.
+
+## Note about MySQL
+
+In order for MySQL to be reachable by NodeJS app the host must be different from the test environment. `host.docker.internal` so the following was put in to the db.ts file.
+`const host = !!isDocker() ? "host.docker.internal" : env.NODE_DB_HOST;`
 
 ## Testing
 
@@ -80,4 +88,4 @@ Advantages
 -  It is excellent for starting development and testing environments.
 -  You can ramp up legacy environments without polluting your host or client system.
 
-To spin up mysql container `docker-compose -f mysql.yml up`.
+To spin up mysql container `docker compose -f mysql.yml up`.

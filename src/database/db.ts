@@ -1,5 +1,9 @@
 import { Sequelize } from "sequelize";
+import isDocker from "is-docker";
 const env = require("dotenv").config().parsed;
+
+// chose the host depending on if it is running inside of a docker container
+const host = !!isDocker() ? "host.docker.internal" : env.NODE_DB_HOST;
 
 export const db: any = {};
 const sequelize = new Sequelize(
@@ -7,10 +11,8 @@ const sequelize = new Sequelize(
    env.NODE_DB_USER,
    env.NODE_DB_PASS,
    {
-      //port: env.NODE_DB_PORT,
-      //host: env.NODE_DB_HOST,
-      port: 3307,
-      host: "127.0.0.1",
+      port: env.NODE_DB_PORT,
+      host,
       dialect: "mysql",
       logging: console.log,
 

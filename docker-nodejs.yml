@@ -7,7 +7,7 @@ services:
          context: .
          dockerfile: Dockerfile
       container_name: node-api
-      expose: ["3306", "3307"]
+      expose: ["3306"]
       command: npm run start
       volumes:
          - .:/src/app
@@ -15,7 +15,3 @@ services:
          # /path-to-node_modules/app/node_modules (above)
       ports:
          - "5010:5010"
-
-      # making these separate containers
-      #depends_on:
-      #   - mysql-container
