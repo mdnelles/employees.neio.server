@@ -18,7 +18,7 @@ services:
          - MYSQL_USER=$NODE_DB_USER
          - MYSQL_PASSWORD=$NODE_DB_PASS
          - MYSQL_ROOT_PASSWORD=$NODE_DB_PASS_ROOT
-         - MYSQL_ROOT_HOST=%
+         - MYSQL_ROOT_HOST=host.docker.internal
       networks:
          - app-tier
 
