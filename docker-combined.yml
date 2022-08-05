@@ -1,0 +1,43 @@
+version: "3.7"
+networks:
+   app-tier:
+      driver: bridge
+
+services:
+   mysql-container:
+      image: mysql:8.0
+      container_name: mysql-api
+      env_file: ./.env
+      ports:
+         # <Port exposed> : < MySQL Port running inside container>
+         - "3307:3306"
+      volumes:
+         - "./.mysql-data/db:/var/lib/mysql"
+      environment:
+         - MYSQL_DATABASE=$NODE_DB_NAME
+         - MYSQL_USER=$NODE_DB_USER
+         - MYSQL_PASSWORD=$NODE_DB_PASS
+         - MYSQL_ROOT_PASSWORD=$NODE_DB_PASS_ROOT
+         - MYSQL_ROOT_HOST=%
+      networks:
+         - app-tier
+
+   node-server:
+      #build: .
+      build:
+         context: .
+         dockerfile: Dockerfile
+      container_name: node-api
+      command: npm run start
+      volumes:
+         - .:/src/app
+         - /src/app/node_modules
+         # /path-to-node_modules/app/node_modules (above)
+      ports:
+         - "5010:5010"
+
+      depends_on:
+         - mysql-container
+
+      networks:
+         - app-tier

@@ -1,0 +1,15 @@
+version: "3"
+services:
+   mysql:
+      image: mysql:8.0.29
+      env_file: ./.env
+      container_name: "mysql2023b"
+      environment:
+         MYSQL_DATABASE: "employees"
+         MYSQL_USER: $NODE_DB_USER
+         MYSQL_PASSWORD: $NODE_DB_PASS
+         MYSQL_ROOT_PASSWORD: $NODE_DB_PASS_ROOT
+      ports:
+         - "3307:3306"
+      volumes:
+         - /var/lib/mysql

@@ -1,37 +1,21 @@
-version: "3.8"
-services:
-   mysqldb:
-      image: mysql:8.0
-      env_file: ./.env
-      ports:
-         # <Port exposed> : < MySQL Port running inside container>
-         - "3307:3306"
-      expose:
-         # Opens port 3307 on the container
-         - "3307"
-         # Where our data will be persisted for now
+version: "3.7"
 
-      volumes:
-         - "./.mysql-data/db:/var/lib/mysql"
-      environment:
-         - MYSQL_DATABASE=$NODE_DB_NAME
-         - MYSQL_USER=$NODE_DB_USER
-         - MYSQL_PASSWORD=$NODE_DB_PASS
-         - MYSQL_ROOT_PASSWORD=$NODE_DB_PASS_ROOT
-   web:
-      build: .
+services:
+   node-server:
+      #build: .
+      build:
+         context: .
+         dockerfile: Dockerfile
+      container_name: node-api
+      expose: ["3306", "3307"]
       command: npm run start
       volumes:
          - .:/src/app
          - /src/app/node_modules
-         # /path-to-node_modules/app/node_modules
+         # /path-to-node_modules/app/node_modules (above)
       ports:
          - "5010:5010"
-      environment:
-         - MYSQL_DATABASE=$NODE_DB_NAME
-         - MYSQL_USER=$NODE_DB_USER
-         - MYSQL_PASSWORD=$NODE_DB_PASS
-         - MYSQL_ROOT_PASSWORD=$NODE_DB_PASS_ROOT
 
-      depends_on:
-         - mysqldb
+      # making these separate containers
+      #depends_on:
+      #   - mysql-container
