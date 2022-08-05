@@ -41,6 +41,9 @@ https://hub.docker.com/ > search `mysql` find the command as below:
 
 `docker run -d -p 3306:3306 --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret`
 
+Make sure your mysql server can allow connections from different hosts
+In `my.cnf` if you use bind-address = 0.0.0.0 your MySQL server will listen for connections on all network interfaces. That means your MySQL server could be reached from the Internet ; make sure to setup firewall rules accordingly.
+
 ## The web service
 
 The first directive in the web service is to build the image based on our Dockerfile. This will recreate the image we used before, but it will now be named according to the project we are in, nodejsexpresstodoapp. After that, we are giving the service some specific instructions on how it should operate:
@@ -80,4 +83,4 @@ Advantages
 -  It is excellent for starting development and testing environments.
 -  You can ramp up legacy environments without polluting your host or client system.
 
-To spin up mysql container `docker-compose -f mysql.yml up`.
+To spin up mysql container `docker compose -f mysql.yml up`.

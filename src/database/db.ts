@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
    {
       //port: env.NODE_DB_PORT,
       //host: env.NODE_DB_HOST,
-      port: 3307,
+      port: 3306,
       host: "127.0.0.1",
       dialect: "mysql",
       logging: console.log,
