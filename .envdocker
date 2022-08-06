@@ -1,0 +1,16 @@
+# basics for db
+# NODE_DB_HOST=host.docker.internal
+NODE_DB_NAME=employees
+NODE_DB_USER=dbadmin
+NODE_DB_PASS=gr8TITUde
+NODE_DB_PASS_ROOT=88%Benz4camp
+NODE_DB_PORT=3306
+
+# app config 
+NODE_SECRET=9if8j34neroiint
+NODE_COOKIE_RESAVE=false
+NODE_ADMIN_EMAIL=mxnelles@gmail.com
+NODE_ADMIN_PASSWORD=g00dness
+NODE_COOKIE_SAVE_UNINITIALZED=false
+NODE_EX=false
+

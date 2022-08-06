@@ -10,8 +10,9 @@
    "scripts": {
       "update:packages": "node wipe-dependencies.js && rm -rf node_modules && npm update --save-dev && npm update --save",
       "client-install": "npm install --prefix client",
-      "start": "ts-node ./src/server.ts --ignore client",
-      "server": "nodemon ./src/server.ts --ignore client"
+      "start": "cp ./env/env-dev ./.env && ts-node ./src/server.ts",
+      "dockerize": "cp ./env/env-docker ./.env && ts-node ./src/server.ts ",
+      "server": "cp ./env/env-dev ./.env && nodemon ./src/server.ts --ignore client "
    },
    "adminStart": true,
    "keywords": [
@@ -39,7 +40,6 @@
       "formidable": "^2.0.1",
       "fs-extra": "^10.1.0",
       "helmet": "^5.1.1",
-      "is-docker": "^3.0.0",
       "jquery": "^3.6.0",
       "jsonwebtoken": "^8.5.1",
       "mysql2": "^2.3.3",

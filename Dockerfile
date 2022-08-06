@@ -1,7 +1,6 @@
 
 FROM node:18
 
-# environment variable => production  improve performance
 ENV NODE_ENV=production
 
 WORKDIR /app
@@ -15,4 +14,4 @@ EXPOSE 5010 3306 3307
 
 COPY . .
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dockerize"]
