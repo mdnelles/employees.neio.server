@@ -40,7 +40,8 @@ https://hub.docker.com/ > search `mysql` find the command as below:
 (remove tag add port numbers)
 
 `docker run -d -p 3306:3306 --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret`
-
+&
+`docker run -t -i -e NODE_DB_HOST='host.docker.internal' -p 5010:5010 server_node-server`
 Make sure your mysql server can allow connections from different hosts
 In `my.cnf` if you use bind-address = 0.0.0.0 your MySQL server will listen for connections on all network interfaces. That means your MySQL server could be reached from the Internet ; make sure to setup firewall rules accordingly.
 
@@ -63,19 +64,8 @@ The first directive in the web service is to build the image based on our Docker
 ## Note about MySQL
 
 In order for MySQL to be reachable by NodeJS app the host must be different from the test environment. `host.docker.internal` so the following was put in to the db.ts file.
-`const host = !!isDocker() ? "host.docker.internal" : env.NODE_DB_HOST;`
 
-## Testing
-
-Example: To test if mysql is running in the container after it is spun up:
-`mysql -u USERNAME -p --host=127.0.0.1 --port=3306` or `mysql -u USERNAME -p --host=localhost --port=3306`
-
-To cause the port number to be used, force a TCP/IP connection. For example, invoke the program in either of these ways:
-
-````
-mysql --port=13306 --host=127.0.0.1
-mysql --port=13306 --protocol=TCP```
-````
+> `const host = !!isDocker() ? "host.docker.internal" : env.NODE_DB_HOST;`
 
 ## Manage multi-container setups with Docker Compose
 

@@ -7,18 +7,18 @@ services:
    mysql-container:
       image: mysql:8.0
       container_name: mysql-api
-      env_file: ./.env
+      env_file: ./.envdocker
       ports:
          # <Port exposed> : < MySQL Port running inside container>
          - "3307:3306"
       volumes:
          - "./.mysql-data/db:/var/lib/mysql"
       environment:
+         - NODE_DB_HOST=host.docker.internal
          - MYSQL_DATABASE=$NODE_DB_NAME
          - MYSQL_USER=$NODE_DB_USER
          - MYSQL_PASSWORD=$NODE_DB_PASS
          - MYSQL_ROOT_PASSWORD=$NODE_DB_PASS_ROOT
-         - MYSQL_ROOT_HOST=host.docker.internal
       networks:
          - app-tier
 
@@ -28,7 +28,9 @@ services:
          context: .
          dockerfile: Dockerfile
       container_name: node-api
-      command: npm run start
+      environment:
+         - NODE_DB_HOST=host.docker.internal
+      command: npm run dockerize
       volumes:
          - .:/src/app
          - /src/app/node_modules
