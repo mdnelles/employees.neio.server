@@ -1,4 +1,4 @@
-name: React Build CI push to server
+name: NodeJS CI push to server
 
 on:
    push:
@@ -20,9 +20,5 @@ jobs:
            run: |
               npm install
               echo "  ------install complete"
-              CI=false npm run build
-              echo "  ------build complete"
-              cd build
-              echo " ------in build folder"
               cp ./* -R ../../../../../../public
               echo " ------copy complete"

@@ -41,7 +41,7 @@ https://hub.docker.com/ > search `mysql` find the command as below:
 
 `docker run -d -p 3306:3306 --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret`
 &
-`docker run -t -i -e NODE_DB_HOST='host.docker.internal' -p 5010:5010 server_node-server`
+`docker run -t -i -e NODE_DB_HOST='host.docker.internal' -p 5020:5020 server_node-server`
 Make sure your mysql server can allow connections from different hosts
 In `my.cnf` if you use bind-address = 0.0.0.0 your MySQL server will listen for connections on all network interfaces. That means your MySQL server could be reached from the Internet ; make sure to setup firewall rules accordingly.
 
@@ -59,7 +59,7 @@ The first directive in the web service is to build the image based on our Docker
 
 -  environment: - The application itself expects the environment variable `DATABASE_URL` to run. This is set in db.js.
 
--  ports: - This will publish the container's port, in this case 5010, to the host as port 5010.
+-  ports: - This will publish the container's port, in this case 5020, to the host as port 5020.
 
 ## Note about MySQL
 

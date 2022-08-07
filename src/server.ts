@@ -21,7 +21,7 @@ import * as basic from "./routes/Basic";
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const app = express();
 const jsonParser = bodyParser.json();
-const port = env.NODE_PORT || 5010;
+const port = env.NODE_PORT || 5020;
 
 app.use(cors());
 app.use(bodyParser.json());
