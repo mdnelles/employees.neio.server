@@ -18,7 +18,7 @@ export const remove = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "remove_title",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -43,7 +43,7 @@ export const list = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "gettitles",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -81,7 +81,7 @@ export const details = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "get_details",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()

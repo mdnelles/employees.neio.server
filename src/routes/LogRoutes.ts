@@ -29,7 +29,7 @@ export const list = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "get_logs",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -64,7 +64,7 @@ export const get_count = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "get_count (logs)",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
