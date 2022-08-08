@@ -29,7 +29,7 @@ Was `const express = require("express");` is
             |_ index.d.ts
                 declare module "express";
 
-## Docker Additional Notes
+## Docker additional notes
 
 restart: `killall Docker && open /Applications/Docker.app`
 
