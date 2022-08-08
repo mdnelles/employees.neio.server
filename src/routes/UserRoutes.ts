@@ -42,7 +42,7 @@ export const register = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "register.2",
          "catch",
-         error || { error: true },
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -67,7 +67,7 @@ export const edit = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "register.2",
          "catch",
-         error || { error: true },
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -106,7 +106,7 @@ export const login = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "login failed",
          "login failed",
-         error || { error: true },
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -128,7 +128,7 @@ export const del = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "remove_user",
          "catch",
-         error || { error: true },
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -151,7 +151,7 @@ export const list = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "getusers",
          "catch",
-         error || { error: true },
+         "error",
          ip,
          req.headers.referer,
          getDate()
