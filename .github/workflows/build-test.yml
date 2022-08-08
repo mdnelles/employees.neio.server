@@ -26,9 +26,9 @@ jobs:
 
          - name: Build
            run: |
-              cp ./* -R ../../../../nodejs
+              cp ./* -R ../../../../../nodejs
               echo " ------copy complete"
-              cd ../../../../nodejs
+              cd ../../../../../nodejs
               npm ci
               echo "  ------install complete"
               npm run build
