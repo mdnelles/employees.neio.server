@@ -139,7 +139,7 @@ export const del = async (req: any, res: any): Promise<any> => {
 
 export const list = async (req: any, res: any): Promise<any> => {
    try {
-      let data = User.findAll({
+      let data = await User.findAll({
          where: {
             isDeleted: 0,
          },
