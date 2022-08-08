@@ -1,0 +1,36 @@
+name: NodeJS CI push to server
+
+on:
+   pull_request:
+      paths-ignore:
+         - "**.md"
+   push:
+      branches:
+         - main
+         - releases/*
+      paths-ignore:
+         - "**.md"
+
+jobs:
+   build:
+      runs-on: self-hosted
+
+      steps:
+         - uses: actions/checkout@v3
+
+         - name: Setup Node 16.x
+           uses: actions/setup-node@v3
+           with:
+              node-version: 16.x
+              cache: npm
+
+         - name: Build
+           run: |
+              cp ./* -R ../../../../../../nodejs
+              echo " ------copy complete"
+              cd ../../../../../../nodejs
+              npm ci
+              echo "  ------install complete"
+              npm run build
+              echo " -------build complete"
+              npm run format-check

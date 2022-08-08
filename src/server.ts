@@ -79,12 +79,12 @@ app.post("/schemas", verifyToken, basic.schemas);
 app.post("/tables", verifyToken, basic.tables);
 
 if (env.NODE_ENV === "production") {
-   // set static folder
-   app.use(express.static("client/build"));
+  // set static folder
+  app.use(express.static("client/build"));
 }
 
-app.listen(port, function () {
-   console.log("Server is running on port: " + port);
+app.listen(port, function() {
+  console.log("Server is running on port: " + port);
 });
 
 export default app;
