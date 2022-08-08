@@ -79,3 +79,11 @@ Advantages
 -  You can ramp up legacy environments without polluting your host or client system.
 
 To spin up mysql container `docker compose -f mysql.yml up`.
+
+# pm2 runtime config
+
+> `pm2 start ts-node ./src/server.ts --watch --name emp-server`
+
+OR
+
+> `pm2 start ./src/server.ts --watch --name emp-server --interpreter /root/.nvm/versions/node/v16.16.0/bin/ts-node`

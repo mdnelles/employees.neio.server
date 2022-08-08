@@ -1,0 +1,16 @@
+{
+   "apps": [
+      {
+         "name": "employees-server",
+         "script": "./src/server.ts",
+         "node_args": ["--debug=7000"]
+      }
+   ],
+   "servers": [
+      {
+         "name": "employees-server",
+         "script": "./src/server.ts",
+         "node_args": ["--debug=7000"]
+      }
+   ]
+}
