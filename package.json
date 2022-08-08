@@ -3,8 +3,8 @@
    "version": "0.1.08",
    "description": "Server side application for employees app",
    "engines": {
-      "node": "^16.16.0",
-      "npm": "^8.15.1"
+      "node": "^16.0.0",
+      "npm": "^8.0.0"
    },
    "main": "./src/server.ts",
    "scripts": {
