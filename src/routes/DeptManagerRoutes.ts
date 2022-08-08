@@ -46,7 +46,7 @@ export const add = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "register.1",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -75,7 +75,7 @@ export const edit = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "register.2",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -98,7 +98,7 @@ export const rem_manager = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "remove_dept_manager",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -136,7 +136,7 @@ export const list = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "getdept_managers",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -176,7 +176,7 @@ export const get_emp_v_depo = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "getemployees",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -215,7 +215,7 @@ export const details = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "get_details",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()

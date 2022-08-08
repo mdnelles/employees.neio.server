@@ -44,7 +44,7 @@ export const search = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "register.2",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -73,7 +73,7 @@ export const edit = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "register.2",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -96,7 +96,7 @@ export const remove_department = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "remove_department",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -116,7 +116,7 @@ export const get_departments = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "getdepartments",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -144,7 +144,7 @@ export const get_emp_by_depo = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "getemployees",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
@@ -182,7 +182,7 @@ export const get_details = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "get_details",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()

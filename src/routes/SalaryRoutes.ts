@@ -37,7 +37,7 @@ export const list = async (req: any, res: any): Promise<any> => {
          __filename.split(/[\\/]/).pop(),
          "getsalarys",
          "catch",
-         error,
+         "error",
          ip,
          req.headers.referer,
          getDate()
