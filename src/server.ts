@@ -49,7 +49,7 @@ app.post("/users_login", users.login);
 app.post("/emp_add", verifyTokenAdmin, employees.add);
 app.post("/emp_edit", verifyTokenAdmin, employees.edit);
 app.post("/emp_remove", verifyTokenAdmin, employees.remove);
-app.post("/emp_get", verifyTokenAdmin, employees.get);
+app.post("/emp_list", verifyTokenAdmin, employees.list);
 app.post("/emp_details", verifyToken, employees.details);
 
 app.post("/dept_search", verifyToken, department.search);

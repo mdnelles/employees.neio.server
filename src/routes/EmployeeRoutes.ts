@@ -103,7 +103,7 @@ export const remove = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const get = async (req: any, res: any): Promise<any> => {
+export const list = async (req: any, res: any): Promise<any> => {
    try {
       const data = await Employees.findAll({ limit: 1000 });
       res.json({ status: 200, err: false, msg: "ok", data });
