@@ -23,10 +23,9 @@ jobs:
            with:
               node-version: 16.x
               cache: npm
-
+         #pm2 is set to --watch so it will restart express on change
          - name: Build
            run: |
               cp ./* -R ../../../../../nodejs
               cd ../../../../../nodejs
               npm ci
-              npm run format-check
