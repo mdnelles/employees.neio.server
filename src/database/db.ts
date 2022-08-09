@@ -2,9 +2,6 @@ import { Sequelize } from "sequelize";
 const env = require("dotenv").config().parsed;
 const host = env.NODE_DB_HOST;
 
-console.log("------env.NODE_DB_HOST-----");
-console.log(env.NODE_DB_HOST);
-
 export const db: any = {};
 const sequelize = new Sequelize(
    env.NODE_DB_NAME,

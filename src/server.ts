@@ -57,6 +57,7 @@ app.post("/dept_edit", verifyTokenAdmin, department.edit);
 app.post("/dept_remove", verifyToken, department.remove_department);
 app.post("/dept_get_emp_by", verifyToken, department.get_emp_by_depo);
 app.post("/dept_details", verifyToken, department.get_details);
+app.post("/dept_list", verifyToken, department.get_departments);
 
 app.post("/depman_add", verifyTokenAdmin, dept_manager.add);
 app.post("/depman_edit", verifyTokenAdmin, dept_manager.edit);
@@ -79,12 +80,12 @@ app.post("/schemas", verifyToken, basic.schemas);
 app.post("/tables", verifyToken, basic.tables);
 
 if (env.NODE_ENV === "production") {
-  // set static folder
-  app.use(express.static("client/build"));
+   // set static folder
+   app.use(express.static("client/build"));
 }
 
 app.listen(port, function() {
-  console.log("Server is running on port: " + port);
+   console.log("Server is running on port: " + port);
 });
 
 export default app;
