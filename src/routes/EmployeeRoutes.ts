@@ -105,7 +105,7 @@ export const remove = async (req: any, res: any): Promise<any> => {
 
 export const list = async (req: any, res: any): Promise<any> => {
    try {
-      const data = await Employees.findAll({ limit: 1000 });
+      const data = await Employees.findAll({ limit: 100 });
       res.json({ status: 200, err: false, msg: "ok", data });
    } catch (error) {
       log2db(
@@ -125,14 +125,14 @@ export const list = async (req: any, res: any): Promise<any> => {
 export const details = async (req: any, res: any): Promise<any> => {
    try {
       const data1 = await Salarie.findAll({
-         where: { emp_no: req.body.id },
+         where: { emp_no: req.body.emp_no },
       });
 
-      let data2 = db.sequelize.query(
+      let data2 = await db.sequelize.query(
          `SELECT * FROM dept_emps  LEFT JOIN departments ON  dept_emps.dept_no=departments.dept_no WHERE dept_emps.emp_no= :emp_no`,
          {
             replacements: {
-               emp_no: req.body.id,
+               emp_no: req.body.emp_no,
             },
             type: Sequelize.QueryTypes.SELECT,
          }
