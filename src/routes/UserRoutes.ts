@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+/* eslint-disable */
 const env = require("dotenv").config().parsed;
 
 import log2db from "../components/Logger";

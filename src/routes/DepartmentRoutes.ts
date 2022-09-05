@@ -9,7 +9,7 @@ import { ip, getDate } from "../components/Global";
 export const search = async (req: any, res: any): Promise<any> => {
    try {
       const { first_name, last_name, email, password } = req.body;
-      var today = new Date();
+      const today = new Date();
       const departmentData = {
          first_name,
          last_name,
@@ -31,7 +31,7 @@ export const search = async (req: any, res: any): Promise<any> => {
             10,
             (error: any, hash: any) => {
                departmentData.password = hash;
-               let data = Departments.create(departmentData);
+               const data = Departments.create(departmentData);
                res.json({ status: 201, err: false, msg: "ok", data });
             }
          );
@@ -57,7 +57,7 @@ export const search = async (req: any, res: any): Promise<any> => {
 export const edit = async (req: any, res: any): Promise<any> => {
    try {
       const { id, first_name, last_name, email } = req.body;
-      let data = await Departments.update(
+      const data = await Departments.update(
          {
             first_name,
             last_name,
@@ -85,7 +85,7 @@ export const edit = async (req: any, res: any): Promise<any> => {
 
 export const remove_department = async (req: any, res: any): Promise<any> => {
    try {
-      let data = await Departments.update(
+      const data = await Departments.update(
          { isDeleted: 1 },
          { returning: true, where: { id: req.body.id } }
       );
@@ -108,7 +108,7 @@ export const remove_department = async (req: any, res: any): Promise<any> => {
 
 export const get_departments = async (req: any, res: any): Promise<any> => {
    try {
-      let data = await Departments.findAll({ limit: 1000 });
+      const data = await Departments.findAll({ limit: 1000 });
       res.json({ status: 201, err: false, msg: "ok", data });
    } catch (error) {
       log2db(
@@ -128,7 +128,7 @@ export const get_departments = async (req: any, res: any): Promise<any> => {
 
 export const get_emp_by_depo = async (req: any, res: any): Promise<any> => {
    try {
-      let data = await db.sequelize.query(
+      const data = await db.sequelize.query(
          `SELECT * FROM dept_emps  LEFT JOIN employees ON  dept_emps.emp_no=employees.emp_no WHERE dept_emps.dept_no= :dept_no LIMIT 250`,
          {
             replacements: {
@@ -157,11 +157,11 @@ export const get_emp_by_depo = async (req: any, res: any): Promise<any> => {
 export const get_details = async (req: any, res: any): Promise<any> => {
    try {
       const { id } = req.body;
-      let data1 = await Salarie.findAll({
+      const data1 = await Salarie.findAll({
          where: { emp_no: id },
       });
 
-      let data2 = await db.sequelize.query(
+      const data2 = await db.sequelize.query(
          `SELECT * FROM dept_emps  LEFT JOIN departments ON  dept_emps.dept_no=departments.dept_no WHERE dept_emps.emp_no= :emp_no`,
          {
             replacements: {
@@ -171,7 +171,7 @@ export const get_details = async (req: any, res: any): Promise<any> => {
          }
       );
 
-      let data = {
+      const data = {
          departments: data2,
          salaries: data1,
       };

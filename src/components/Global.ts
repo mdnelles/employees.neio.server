@@ -1,10 +1,10 @@
-export const ip: string = "0.0.0.0";
+export const ip = "0.0.0.0";
 export const getDate = () => {
-   let d: Date = new Date();
+   const d: Date = new Date();
    //ts-ignore
    let month: number = d.getMonth();
    month += 1;
-   let tdate =
+   const tdate =
       d.getDate() +
       "-" +
       month +

@@ -5,8 +5,8 @@ import { ip, getDate } from "../components/Global";
 
 export const list = async (req: any, res: any): Promise<any> => {
    try {
-      let low = req.body.salaryRange || 50000;
-      let high = low + 2499;
+      const low = req.body.salaryRange || 50000;
+      const high = low + 2499;
       const data = await db.sequelize.query(
          ` SELECT s.emp_no, 
                     ANY_VALUE(salary) as any_salary,

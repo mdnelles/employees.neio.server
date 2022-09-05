@@ -1,4 +1,4 @@
-const Log = require("../models/Logs");
+import { Logs } from "../models/Logs";
 
 const log2db = (
    code: number,
@@ -10,11 +10,14 @@ const log2db = (
    refer: string | undefined,
    tdate: string
 ) => {
-   console.log(" >> inside log2db > msg_app = " + msg_app);
+   console.log(">log2db: " + msg_app);
    if (!msg_app) {
       msg_app = "N/A";
    } else {
-      msg_app = msg_app.toString().replace(/"/g, "``").replace(/'/g, "`");
+      msg_app = msg_app
+         .toString()
+         .replace(/"/g, "``")
+         .replace(/'/g, "`");
    }
 
    msg_app = msg_app.toString().substring(0, 250);
@@ -31,7 +34,7 @@ const log2db = (
       refer,
       tdate,
    };
-   Log.create(logData);
+   Logs.create(logData);
    return true;
 };
 export default log2db;

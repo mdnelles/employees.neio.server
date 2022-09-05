@@ -9,8 +9,8 @@ import { ip, getDate } from "../components/Global";
 export const add = async (req: any, res: any): Promise<any> => {
    try {
       const { uuid, first_name, last_name, email, password } = req.body;
-      var today = new Date();
-      let dept_managerData = {
+      const today = new Date();
+      const dept_managerData = {
          uuid,
          first_name,
          last_name,
@@ -59,7 +59,7 @@ export const add = async (req: any, res: any): Promise<any> => {
 export const edit = async (req: any, res: any): Promise<any> => {
    try {
       const { id, first_name, last_name, email } = req.body;
-      let data = await DeptManagers.update(
+      const data = await DeptManagers.update(
          {
             first_name,
             last_name,
@@ -110,7 +110,7 @@ export const rem_manager = async (req: any, res: any): Promise<any> => {
 
 export const list = async (req: any, res: any): Promise<any> => {
    try {
-      let data = await db.sequelize.query(
+      const data = await db.sequelize.query(
          `SELECT 
          dept_managers.from_date, 
          dept_managers.to_date, 
@@ -148,7 +148,7 @@ export const list = async (req: any, res: any): Promise<any> => {
 
 export const get_emp_v_depo = async (req: any, res: any): Promise<any> => {
    try {
-      let data = await db.sequelize.query(
+      const data = await db.sequelize.query(
          `SELECT 
          dept_managers.from_date, 
          dept_managers.to_date, 
@@ -189,11 +189,11 @@ export const get_emp_v_depo = async (req: any, res: any): Promise<any> => {
 export const details = async (req: any, res: any): Promise<any> => {
    try {
       const { id } = req.body;
-      let data1 = await Salarie.findAll({
+      const data1 = await Salarie.findAll({
          where: { emp_no: id },
       });
 
-      let data2 = await db.sequelize.query(
+      const data2 = await db.sequelize.query(
          `SELECT * FROM dept_emps  LEFT JOIN dept_managers ON  dept_emps.dept_no=dept_managers.dept_no WHERE dept_emps.emp_no= :emp_no`,
          {
             replacements: {
@@ -203,7 +203,7 @@ export const details = async (req: any, res: any): Promise<any> => {
          }
       );
 
-      let obj = {
+      const obj = {
          dept_managers: data2,
          salaries: data1,
       };

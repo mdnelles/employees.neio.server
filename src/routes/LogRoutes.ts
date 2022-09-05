@@ -7,10 +7,10 @@ export const list = async (req: any, res: any): Promise<any> => {
    try {
       const { page, code = "500", perPage = 20 } = req.body;
 
-      let offset =
+      const offset =
          page !== undefined && !isNaN(page) ? page * perPage - perPage : 10;
 
-      let data = await db.sequelize.query(
+      const data = await db.sequelize.query(
          "SELECT * FROM logs WHERE code LIKE :code ORDER BY id DESC LIMIT 9500",
          {
             replacements: {
@@ -54,9 +54,9 @@ export const get_count = async (req: any, res: any): Promise<any> => {
       );
 
       data = JSON.stringify(data);
-      let temp1 = data.split(":");
-      let temp2 = temp1[1].split("}");
-      let num = temp2[0];
+      const temp1 = data.split(":");
+      const temp2 = temp1[1].split("}");
+      const num = temp2[0];
       res.json({ status: 200, err: false, msg: "log count", data: num });
    } catch (error) {
       log2db(

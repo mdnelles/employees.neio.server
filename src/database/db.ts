@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+/* eslint-disable */
 const env = require("dotenv").config().parsed;
 const host = env.NODE_DB_HOST;
 
@@ -11,7 +12,7 @@ const sequelize = new Sequelize(
       port: env.NODE_DB_PORT,
       host,
       dialect: "mysql",
-      logging: console.log,
+      //logging: console.log,
 
       pool: {
          max: 5,

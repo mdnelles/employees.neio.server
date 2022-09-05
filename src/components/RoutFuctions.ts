@@ -1,5 +1,5 @@
-//const express = require("express");
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+/* eslint-disable */
 const env = require("dotenv").config().parsed;
 
 const tokenTest = (token: string, res: any, next: any) => {
