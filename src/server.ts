@@ -44,13 +44,13 @@ app.use(helmet());
 app.post("/users_register", users.register);
 app.post("/users_edit", verifyTokenAdmin, users.register);
 app.post("/users_delete", verifyTokenAdmin, users.del);
-app.post("/users_list", verifyTokenAdmin, users.list);
+app.post("/users_list", verifyToken, users.list);
 app.post("/users_login", users.login);
 
 app.post("/emp_add", verifyTokenAdmin, employees.add);
 app.post("/emp_edit", verifyTokenAdmin, employees.edit);
 app.post("/emp_remove", verifyTokenAdmin, employees.remove);
-app.post("/emp_list", verifyTokenAdmin, employees.list);
+app.post("/emp_list", verifyToken, employees.list);
 app.post("/emp_details", verifyToken, employees.details);
 
 app.post("/dept_search", verifyToken, department.search);
@@ -71,7 +71,7 @@ app.post("/salary_list", verifyToken, salary.list);
 
 app.post("/title_rem", verifyTokenAdmin, title.remove);
 app.post("/title_list", verifyToken, title.list);
-app.post("/title_details", verifyTokenAdmin, title.details);
+app.post("/title_details", verifyToken, title.details);
 
 app.post("/logs_list", verifyToken, logs.list);
 app.post("/logs_get_count", verifyToken, logs.get_count);
