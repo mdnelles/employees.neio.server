@@ -7,7 +7,7 @@ import { ip, getDate } from "../components/Global";
 
 export const remove = async (req: any, res: any): Promise<any> => {
    try {
-      let data = await Title.update(
+      const data = await Title.update(
          { isDeleted: 1 },
          { returning: true, where: { id: req.body.id } }
       );
@@ -30,7 +30,7 @@ export const remove = async (req: any, res: any): Promise<any> => {
 
 export const list = async (req: any, res: any): Promise<any> => {
    try {
-      let data = await db.sequelize.query(
+      const data = await db.sequelize.query(
          `select titles.title from employees.titles group by titles.title`,
          {
             type: Sequelize.QueryTypes.SELECT,
@@ -56,10 +56,10 @@ export const list = async (req: any, res: any): Promise<any> => {
 export const details = async (req: any, res: any): Promise<any> => {
    const { id } = req.body;
    try {
-      let data1 = Salarie.findAll({
+      const data1 = Salarie.findAll({
          where: { emp_no: id },
       });
-      let data2 = await db.sequelize.query(
+      const data2 = await db.sequelize.query(
          `SELECT * FROM dept_emps  LEFT JOIN titles ON  dept_emps.dept_no=titles.dept_no WHERE dept_emps.emp_no= :emp_no`,
          {
             replacements: {
@@ -69,7 +69,7 @@ export const details = async (req: any, res: any): Promise<any> => {
          }
       );
 
-      let obj = {
+      const obj = {
          titles: data2,
          salaries: data1,
       };

@@ -9,7 +9,7 @@ import { ip, getDate } from "../components/Global";
 export const add = async (req: any, res: any): Promise<any> => {
    try {
       const { uuid, first_name, last_name, email, password } = req.body;
-      var today = new Date();
+      const today = new Date();
       const employeeData = {
          uuid,
          first_name,
@@ -105,8 +105,21 @@ export const remove = async (req: any, res: any): Promise<any> => {
 
 export const list = async (req: any, res: any): Promise<any> => {
    try {
-      const data = await Employees.findAll({ limit: 100 });
-      res.json({ status: 200, err: false, msg: "ok", data });
+      const sql = `SELECT 
+         employees.emp_no,
+         employees.birth_date,
+         employees.first_name,
+         employees.last_name,
+         employees.gender,
+         employees.hire_date,
+         dept_emps.dept_no,
+         titles.title
+         FROM employees 
+            LEFT JOIN dept_emps ON employees.emp_no = dept_emps.emp_no 
+            RIGHT JOIN titles ON employees.emp_no = titles.emp_no 
+             ORDER BY dept_emps.to_date DESC  LIMIT 2000 `;
+      const data = await db.sequelize.query(sql);
+      res.json({ status: 200, err: false, msg: "ok", data: data[0] });
    } catch (error) {
       log2db(
          500,
@@ -128,7 +141,7 @@ export const details = async (req: any, res: any): Promise<any> => {
          where: { emp_no: req.body.emp_no },
       });
 
-      let data2 = await db.sequelize.query(
+      const data2 = await db.sequelize.query(
          `SELECT * FROM dept_emps  LEFT JOIN departments ON  dept_emps.dept_no=departments.dept_no WHERE dept_emps.emp_no= :emp_no`,
          {
             replacements: {
@@ -138,7 +151,7 @@ export const details = async (req: any, res: any): Promise<any> => {
          }
       );
 
-      let obj = {
+      const obj = {
          departments: data2,
          salaries: data1,
       };

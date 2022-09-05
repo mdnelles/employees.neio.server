@@ -5,6 +5,7 @@ import compression from "compression";
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
+/* eslint-disable */
 const env = require("dotenv").config().parsed;
 
 import { verifyToken, verifyTokenAdmin } from "./components/RoutFuctions";

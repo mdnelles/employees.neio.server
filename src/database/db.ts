@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+/* eslint-disable */
 const env = require("dotenv").config().parsed;
 const host = env.NODE_DB_HOST;
 
