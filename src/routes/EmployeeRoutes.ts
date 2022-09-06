@@ -117,15 +117,10 @@ export const list = async (req: any, res: any): Promise<any> => {
          FROM employees 
             LEFT JOIN dept_emps ON employees.emp_no = dept_emps.emp_no 
             RIGHT JOIN titles ON employees.emp_no = titles.emp_no 
-             ORDER BY dept_emps.to_date DESC  LIMIT 2222`;
+             ORDER BY dept_emps.to_date DESC  LIMIT 3222`;
       const data = await db.sequelize.query(sql);
-      const emp_nos = data[0].map((o: { emp_no: any }) => o.emp_no);
-      const filtered = data[0].filter(
-         ({ emp_no }: any, index: number) =>
-            !emp_nos.includes(emp_no, index + 1)
-      );
 
-      res.json({ status: 200, err: false, msg: "ok", data: filtered });
+      res.json({ status: 200, err: false, msg: "ok", data: data[0] });
    } catch (error) {
       log2db(
          500,
