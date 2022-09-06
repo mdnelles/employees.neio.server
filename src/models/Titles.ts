@@ -2,7 +2,7 @@ import Sequelize from "sequelize";
 import { db } from "../database/db";
 
 export const Title = db.sequelize.define(
-   "Title",
+   "title",
    {
       emp_no: {
          type: Sequelize.INTEGER,
