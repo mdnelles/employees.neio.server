@@ -2,7 +2,7 @@ import Sequelize from "sequelize";
 import { db } from "../database/db";
 
 export const Salarie = db.sequelize.define(
-   "Salarie",
+   "salarie",
    {
       emp_no: {
          type: Sequelize.INTEGER,
