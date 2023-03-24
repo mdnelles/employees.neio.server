@@ -20,7 +20,7 @@ export const list = async (req: any, res: any): Promise<any> => {
                     WHERE s.salary > :low 
                     AND s.salary < :high
                     GROUP BY s.emp_no
-               LIMIT 2000`,
+               LIMIT 50000`,
          {
             replacements: {
                low,
