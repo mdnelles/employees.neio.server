@@ -117,7 +117,7 @@ export const list = async (req: any, res: any): Promise<any> => {
          FROM employees 
             LEFT JOIN dept_emps ON employees.emp_no = dept_emps.emp_no 
             RIGHT JOIN titles ON employees.emp_no = titles.emp_no 
-             ORDER BY dept_emps.to_date DESC  LIMIT 3222`;
+             ORDER BY dept_emps.to_date DESC  LIMIT 100000`;
       const data = await db.sequelize.query(sql);
 
       res.json({ status: 200, err: false, msg: "ok", data: data[0] });
