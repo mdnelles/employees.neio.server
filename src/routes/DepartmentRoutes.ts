@@ -3,10 +3,12 @@ import bcrypt from "bcrypt";
 import { db } from "../database/db";
 import { Departments } from "../models/Departments";
 import { Salarie } from "../models/Salaries";
-import log2db from "../components/Logger";
-import { ip, getDate } from "../components/Global";
+import log2db from "../utils/Logger";
+import { ip, getDate } from "../utils/Global";
 
-export const search = async (req: any, res: any): Promise<any> => {
+import { Request as Req, Response as Res } from "express";
+
+export const search = async (req:Req, res:Res): Promise<any> => {
    try {
       const { first_name, last_name, email, password } = req.body;
       const today = new Date();
@@ -54,7 +56,7 @@ export const search = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const edit = async (req: any, res: any): Promise<any> => {
+export const edit = async (req:Req, res:Res): Promise<any> => {
    try {
       const { id, first_name, last_name, email } = req.body;
       const data = await Departments.update(
@@ -83,7 +85,7 @@ export const edit = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const remove_department = async (req: any, res: any): Promise<any> => {
+export const remove_department = async (req:Req, res:Res): Promise<any> => {
    try {
       const data = await Departments.update(
          { isDeleted: 1 },
@@ -106,7 +108,7 @@ export const remove_department = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const get_departments = async (req: any, res: any): Promise<any> => {
+export const get_departments = async (req:Req, res:Res): Promise<any> => {
    try {
       const data = await Departments.findAll({ limit: 1000 });
       res.json({ status: 201, err: false, msg: "ok", data });
@@ -126,7 +128,7 @@ export const get_departments = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const get_emp_by_depo = async (req: any, res: any): Promise<any> => {
+export const get_emp_by_depo = async (req:Req, res:Res): Promise<any> => {
    try {
       const data = await db.sequelize.query(
          `SELECT * FROM dept_emps  LEFT JOIN employees ON  dept_emps.emp_no=employees.emp_no WHERE dept_emps.dept_no= :dept_no LIMIT 250`,
@@ -154,7 +156,7 @@ export const get_emp_by_depo = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const get_details = async (req: any, res: any): Promise<any> => {
+export const get_details = async (req:Req, res:Res): Promise<any> => {
    try {
       const { id } = req.body;
       const data1 = await Salarie.findAll({

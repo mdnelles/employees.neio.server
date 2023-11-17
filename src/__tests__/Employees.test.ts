@@ -3,6 +3,7 @@ import { add, remove, list, details } from "../routes/EmployeeRoutes";
 import { Employees } from "../models/Employees";
 import { Salarie } from "../models/Salaries";
 import { db } from "../database/db";
+import { Request as Req, Response as Res } from "express";
 
 // Mock bcrypt
 jest.mock("bcrypt", () => ({
@@ -72,7 +73,7 @@ describe("Employees Tests", () => {
       // Mock the "create" function to return the created employee
       Employees.create.mockResolvedValue(createdEmployee);
 
-      await add(req, res);
+      await add(req as Req, res as any);
 
       expect(Employees.findOne).toHaveBeenCalledWith({
          where: {
@@ -106,7 +107,7 @@ describe("Employees Tests", () => {
          json: jest.fn(),
       };
 
-      await remove(req, res);
+      await remove(req as Req, res as any);
 
       expect(Employees.update).toHaveBeenCalledWith(
          { isDeleted: 1 },
@@ -145,7 +146,7 @@ describe("Employees Tests", () => {
       // Mock the Sequelize query function to return the SQL result
       db.sequelize.query.mockResolvedValue([sqlResult]);
 
-      await list(req, res);
+      await list(req as Req, res as any);
 
       expect(db.sequelize.query).toHaveBeenCalledWith(expect.any(String));
       expect(res.json).toHaveBeenCalledWith({
@@ -180,7 +181,7 @@ describe("Employees Tests", () => {
       // Mock the Sequelize query function to return the deptEmpsData
       db.sequelize.query.mockResolvedValue(deptEmpsData);
 
-      await details(req, res);
+      await details(req as Req, res as any);
 
       expect(Salarie.findAll).toHaveBeenCalledWith({
          where: { emp_no: req.body.emp_no },

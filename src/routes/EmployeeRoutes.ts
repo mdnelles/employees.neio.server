@@ -3,10 +3,11 @@ import bcrypt from "bcrypt";
 import { db } from "../database/db";
 import { Employees } from "../models/Employees";
 import { Salarie } from "../models/Salaries";
-import log2db from "../components/Logger";
-import { ip, getDate } from "../components/Global";
+import log2db from "../utils/Logger";
+import { ip, getDate } from "../utils/Global";
+import { Request as Req, Response as Res } from "express";
 
-export const add = async (req: any, res: any): Promise<any> => {
+export const add = async (req:Req, res:Res): Promise<any> => {
    try {
       const { uuid, first_name, last_name, email, password } = req.body;
       const today = new Date();
@@ -51,7 +52,7 @@ export const add = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const edit = async (req: any, res: any): Promise<any> => {
+export const edit = async (req:Req, res:Res): Promise<any> => {
    try {
       const { id, first_name, last_name, email } = req.body;
       await Employees.update(
@@ -80,7 +81,7 @@ export const edit = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const remove = async (req: any, res: any): Promise<any> => {
+export const remove = async (req:Req, res:Res): Promise<any> => {
    try {
       const { id } = req.body;
       await Employees.update(
@@ -103,7 +104,7 @@ export const remove = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const list = async (req: any, res: any): Promise<any> => {
+export const list = async (req:Req, res:Res): Promise<any> => {
    try {
       const sql = `SELECT 
          employees.emp_no,
@@ -136,7 +137,7 @@ export const list = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const details = async (req: any, res: any): Promise<any> => {
+export const details = async (req:Req, res:Res): Promise<any> => {
    try {
       const data1 = await Salarie.findAll({
          where: { emp_no: req.body.emp_no },
