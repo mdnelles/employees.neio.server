@@ -1,9 +1,11 @@
 import Sequelize from "sequelize";
 import { db } from "../database/db";
-import log2db from "../components/Logger";
-import { ip, getDate } from "../components/Global";
+import log2db from "../utils/Logger";
+import { ip, getDate } from "../utils/Global";
 
-export const list = async (req: any, res: any): Promise<any> => {
+import { Request as Req, Response as Res } from "express";
+
+export const list = async (req:Req, res:Res): Promise<any> => {
    try {
       const { page, code = "500", perPage = 20 } = req.body;
 
@@ -39,7 +41,7 @@ export const list = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const get_count = async (req: any, res: any): Promise<any> => {
+export const get_count = async (req:Req, res:Res): Promise<any> => {
    try {
       const { code = 500 } = req.body;
 

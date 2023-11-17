@@ -3,11 +3,12 @@ import jwt from "jsonwebtoken";
 /* eslint-disable */
 const env = require("dotenv").config().parsed;
 
-import log2db from "../components/Logger";
-import { ip, getDate } from "../components/Global";
+import log2db from "../utils/Logger";
+import { ip, getDate } from "../utils/Global";
 import { User } from "../models/User";
+import { Request as Req, Response as Res } from "express";
 
-export const register = async (req: any, res: any): Promise<any> => {
+export const register = async (req:Req, res:Res): Promise<any> => {
    var today = new Date();
    const { uuid, first_name, last_name, email, password } = req.body;
 
@@ -53,7 +54,7 @@ export const register = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const edit = async (req: any, res: any): Promise<any> => {
+export const edit = async (req:Req, res:Res): Promise<any> => {
    const { first_name, last_name, email } = req.body;
    try {
       let user = await User.update(
@@ -78,7 +79,7 @@ export const edit = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const login = async (req: any, res: any): Promise<any> => {
+export const login = async (req:Req, res:Res): Promise<any> => {
    const secret: string = env.NODE_SECRET || "EEmp967";
    try {
       const { email, password } = req.body;
@@ -116,7 +117,7 @@ export const login = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const del = async (req: any, res: any): Promise<any> => {
+export const del = async (req:Req, res:Res): Promise<any> => {
    try {
       let data = await User.update(
          { isDeleted: 1 },
@@ -138,7 +139,7 @@ export const del = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const list = async (req: any, res: any): Promise<any> => {
+export const list = async (req:Req, res:Res): Promise<any> => {
    try {
       let data = await User.findAll({
          where: {

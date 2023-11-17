@@ -2,10 +2,11 @@ import Sequelize from "sequelize";
 import { db } from "../database/db";
 import { Title } from "../models/Titles";
 import { Salarie } from "../models/Salaries";
-import log2db from "../components/Logger";
-import { ip, getDate } from "../components/Global";
+import log2db from "../utils/Logger";
+import { ip, getDate } from "../utils/Global";
+import { Request as Req, Response as Res } from "express";
 
-export const remove = async (req: any, res: any): Promise<any> => {
+export const remove = async (req:Req, res:Res): Promise<any> => {
    try {
       const data = await Title.update(
          { isDeleted: 1 },
@@ -28,7 +29,7 @@ export const remove = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const list = async (req: any, res: any): Promise<any> => {
+export const list = async (req:Req, res:Res): Promise<any> => {
    try {
       const data = await db.sequelize.query(
          `select titles.title from employees.titles group by titles.title`,
@@ -53,7 +54,7 @@ export const list = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const details = async (req: any, res: any): Promise<any> => {
+export const details = async (req:Req, res:Res): Promise<any> => {
    const { id } = req.body;
    try {
       const data1 = Salarie.findAll({

@@ -1,12 +1,13 @@
 //import Sequelize from "sequelize";
 import { db } from "../database/db";
+import { Request as Req, Response as Res } from "express";
 
-export const api = async (req: any, res: any): Promise<any> => {
+export const api = async (req:Req, res:Res): Promise<any> => {
    res.json({ status: 201, err: false, msg: "basic api" });
    console.log(" >>>> basic");
 };
 
-export const schemas = async (req: any, res: any): Promise<any> => {
+export const schemas = async (req:Req, res:Res): Promise<any> => {
    try {
       const schemas = await db.sequelize.query("SHOW SCHEMAS");
 
@@ -17,7 +18,7 @@ export const schemas = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const tables = async (req: any, res: any): Promise<any> => {
+export const tables = async (req:Req, res:Res): Promise<any> => {
    try {
       const tables = await db.sequelize.query("SHOW TABLES");
 

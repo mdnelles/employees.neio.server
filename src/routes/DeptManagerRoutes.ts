@@ -3,10 +3,11 @@ import bcrypt from "bcrypt";
 import { db } from "../database/db";
 import { DeptManagers } from "../models/DeptManager";
 import { Salarie } from "../models/Salaries";
-import log2db from "../components/Logger";
-import { ip, getDate } from "../components/Global";
+import log2db from "../utils/Logger";
+import { ip, getDate } from "../utils/Global";
+import { Request as Req, Response as Res } from "express";
 
-export const add = async (req: any, res: any): Promise<any> => {
+export const add = async (req:Req, res:Res): Promise<any> => {
    try {
       const { uuid, first_name, last_name, email, password } = req.body;
       const today = new Date();
@@ -56,7 +57,7 @@ export const add = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const edit = async (req: any, res: any): Promise<any> => {
+export const edit = async (req:Req, res:Res): Promise<any> => {
    try {
       const { id, first_name, last_name, email } = req.body;
       const data = await DeptManagers.update(
@@ -85,7 +86,7 @@ export const edit = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const rem_manager = async (req: any, res: any): Promise<any> => {
+export const rem_manager = async (req:Req, res:Res): Promise<any> => {
    try {
       const data = await DeptManagers.update(
          { isDeleted: 1 },
@@ -108,7 +109,7 @@ export const rem_manager = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const list = async (req: any, res: any): Promise<any> => {
+export const list = async (req:Req, res:Res): Promise<any> => {
    try {
       const data = await db.sequelize.query(
          `SELECT 
@@ -146,7 +147,7 @@ export const list = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const get_emp_v_depo = async (req: any, res: any): Promise<any> => {
+export const get_emp_v_depo = async (req:Req, res:Res): Promise<any> => {
    try {
       const data = await db.sequelize.query(
          `SELECT 
@@ -186,7 +187,7 @@ export const get_emp_v_depo = async (req: any, res: any): Promise<any> => {
    }
 };
 
-export const details = async (req: any, res: any): Promise<any> => {
+export const details = async (req:Req, res:Res): Promise<any> => {
    try {
       const { id } = req.body;
       const data1 = await Salarie.findAll({

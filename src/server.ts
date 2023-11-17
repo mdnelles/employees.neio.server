@@ -8,7 +8,7 @@ import helmet from "helmet";
 /* eslint-disable */
 const env = require("dotenv").config().parsed;
 
-import { verifyToken, verifyTokenAdmin } from "./components/RoutFuctions";
+import { verifyToken, verifyTokenAdmin } from "./utils/RoutFuctions";
 
 import * as users from "./routes/UserRoutes";
 import * as employees from "./routes/EmployeeRoutes";
